@@ -1,13 +1,14 @@
-pragma solidity ^0.7.0;
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract TicketFactory is ERC1155 {
 
+    constructor() ERC1155("test_uri") {
 
-    constructor() {
-        
     }
 
+    function test() public view returns (string memory){
+        return "Test";
+    }
 }
