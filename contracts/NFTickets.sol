@@ -18,6 +18,8 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
 
     struct CustomTicketMetadata {
         uint eventDate; // Needs conversion from input date to UNIX timestamp
+        string ticketType;
+        string imageUrl;
         CustomTicketState state;
         // Add metadata...
     }
@@ -26,6 +28,13 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         address owner;
         uint256 tokenSalePrice;
         uint256 revenue;
+        CustomTicketMetadata metadata;
+    }
+
+    struct CustomTicketInputStruct {
+        uint256 unitPrice;
+        uint256 maxSupply;
+        string eventDesc;
         CustomTicketMetadata metadata;
     }
 
@@ -48,17 +57,23 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         uint256[] _tokenIds
     );
 
+    function batchCreateEventTickets(
+        CustomTicketInputStruct[] memory customTicketsInput
+    ) public {
+        for (uint i; i<customTicketsInput.length;i++){
+            createEventTickets(customTicketsInput[i]);
+        }
+    }
 
     function createEventTickets(
-        uint256 _maxSupply,
-        uint256 _unitPrice,
-        string memory _eventDesc,
-        CustomTicketMetadata memory metadata
+        CustomTicketInputStruct memory customTicketInput
     ) public {
-        CustomTicketMetadata memory _metadata = CustomTicketMetadata(metadata.eventDate, CustomTicketState(false));
-        nfTickets[_currentEventId] = CustomTicket(msg.sender, _unitPrice, 0, _metadata);
-        _mint(msg.sender, _currentEventId, _maxSupply, "");
-        emit TicketCreation(_currentEventId, _unitPrice, _eventDesc);
+        CustomTicketMetadata memory _metadata = CustomTicketMetadata(customTicketInput.metadata.eventDate,customTicketInput.metadata.ticketType, customTicketInput.metadata.imageUrl, CustomTicketState(false));
+        nfTickets[_currentEventId] = CustomTicket(msg.sender, customTicketInput.unitPrice, 0, _metadata);
+        //Here we can try to use VRF and _mint a few "special tokens"??
+        _mint(msg.sender, _currentEventId, customTicketInput.maxSupply, "");
+
+        emit TicketCreation(_currentEventId, customTicketInput.unitPrice, customTicketInput.eventDesc);
         _currentEventId += 1;
     }
 
@@ -80,6 +95,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
             "Not enough funds sent to buy the tickets"
         );
 
+        // Don't we need to transfer the eth to the owner's account?
         nfTickets[_tokenId].revenue += msg.value;
         _safeTransferFrom(_owner, msg.sender, _tokenId, _numberOfTickets, "");
     }
