@@ -1,7 +1,11 @@
-Chainlink-hackathon
+NFTickets
 
-- Initiated Brownie Scaffold with React
+A NFT based ticket minting platform and marketplace
 
-- Added open zeppelin and added a boilerplate for TicketFactory (extends ERC1155 which from conducted research seems to be the goto standard for our application)
+Brief description
 
-- My suggestion is that we keep this branch for main upgrades, so any change to the repo should be implemented on its own branch. Proposals for merge can be done through Pull requests
+- Enable Tickets as dynamic NFTs by making use of Keepers and information from the external world
+
+- Use Oracle Price feeds to enable correct payment confirmation in dollars
+
+- Use IPFS to store part of the metadata that's too large to store onchain 
