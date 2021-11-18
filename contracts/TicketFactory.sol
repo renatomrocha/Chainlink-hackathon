@@ -6,11 +6,12 @@ import "OpenZeppelin/openzeppelin-contracts@4.3.0/contracts/token/ERC1155/ERC115
 contract TicketFactory is ERC1155 {
     uint256 private _currentEventId = 0;
 
+
     mapping(address => uint256) private sales;
     mapping(uint256 => address) public owners;
     mapping(uint256 => uint256) public ownerTokenSalePrices;
 
-    constructor() ERC1155("test_uri") {}
+    constructor() ERC1155("https://localhost/NFTickets/{id}.json") {}
 
     event TicketCreation(
         uint256 _tokenId,
