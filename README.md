@@ -8,4 +8,6 @@ Brief description
 
 - Use Oracle Price feeds to enable correct payment confirmation in dollars
 
+- Use VRF Oracles for special edition tickets generation
+
 - Use IPFS to store part of the metadata that's too large to store onchain 
