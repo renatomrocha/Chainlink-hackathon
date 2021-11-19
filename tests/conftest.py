@@ -1,6 +1,5 @@
 import pytest
 
-
 @pytest.fixture(autouse=True)
 def setup(fn_isolation):
     """
@@ -32,3 +31,11 @@ def ticket_factory(accounts, TicketFactory):
     Yield a `Contract` object for the TicketFactory contract.
     """
     yield accounts[0].deploy(TicketFactory)
+
+
+@pytest.fixture(scope="module")
+def nfticket_factory():
+    """
+    Yield a `Contract` object for the TicketFactory contract.
+    """
+    return deploy_nfticket_factory()
