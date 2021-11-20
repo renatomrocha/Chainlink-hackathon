@@ -11,3 +11,5 @@ artifacts
 #python
 venv
 scripts/__pycache__
+
+.idea
