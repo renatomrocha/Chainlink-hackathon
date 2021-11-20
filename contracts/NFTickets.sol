@@ -106,6 +106,16 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         return _num;
     }
 
+    // -------- Integrate token URI
+
+    function setTokenUri(uint256 tokenId, string memory _tokenURI) public {
+        require(msg.sender == nfTickets[tokenId].owner,
+        "Transfer caller is not owner nor approved");
+        nfTickets[tokenId].metadata.imageUrl = _tokenURI;
+    }
+
+
+
 
     // -------- Keepers integration ------ Work in progress ... (TODO: Migrate ticket processing functions to own library)
 
