@@ -3,7 +3,7 @@ import {Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 export default function NFTicketsNavbar() {
     return (<Navbar bg="light" expand="lg">
     <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="#home">NFTickets</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="me-auto">

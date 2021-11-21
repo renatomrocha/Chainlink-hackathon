@@ -4,8 +4,8 @@ import NFTContract, {loadBlockchainData, connectWallet, initContract} from './mo
 import NFTicketsNavbar from "./components/Navbar";
 import {getInterval, getTicketsOwned, mintNFTIcket, numTicketsOwned} from "./modules/nfticket_utils";
 
-
-
+import Canvas from './modules/image_processing';
+const IpfsAPI = require('ipfs-api');
 
 
 function App() {
@@ -14,6 +14,8 @@ function App() {
     const [network, setNetwork] = useState<any>(null)
     const [account, setAccount] = useState<any>(null)
     const [contract, setContract] = useState<any>(null);
+
+
 
     const updateConnectionCallback = (data: {"web3": any, "network": string, "accounts": string[]}) => {
         console.log("Will upload with data: ", data);
@@ -55,12 +57,16 @@ function App() {
         <NFTicketsNavbar/>
         <h1>You are connected to {network} network</h1>
         <h2>Your account is: {account}</h2>
+        <div>
+        <Canvas props={{uri:"http://bafybeigblofriz5b4zg4xil45t36snirvpzvja63r2yxybwm5ncuphane4.ipfs.localhost:8080/", badge_uri:"http://bafybeie6j2dwmpkcsmg3anx3v3oj4ojogndw3lcmylq6z6wgr3btcschrm.ipfs.localhost:8080/"}}></Canvas>
+        </div>
+            {/*<img src={"http://bafybeigblofriz5b4zg4xil45t36snirvpzvja63r2yxybwm5ncuphane4.ipfs.localhost:8080/"}></img>*/}
+        <div>
         <button onClick={connectToMetamask}>Connect your wallet</button>
         <button onClick={()=> mintNFTIcket(contract, account)}>Mint tickets</button>
         <button onClick={()=> getInterval(contract, account)}>Interval</button>
         <button onClick={()=> getTicketsOwned(contract, account)}>Tickets owned</button>
-
-
+        </div>
     </div>
   );
 }
