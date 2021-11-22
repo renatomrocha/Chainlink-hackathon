@@ -4,21 +4,12 @@ import 'bootstrap/dist/css/bootstrap.css'
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import TicketGenerator from "./components/TicketGenerator";
-import NFTicketsNavbar from "./components/Navbar";
-import MyTickets from "./components/MyTickets";
-
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
-    <BrowserRouter>
-        <NFTicketsNavbar/>
-        <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="create-tickets" element={<TicketGenerator />} />
-            <Route path="my-tickets" element={<MyTickets />} />
-        </Routes>
-  </BrowserRouter>,
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

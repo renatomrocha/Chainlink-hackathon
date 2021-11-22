@@ -1,11 +1,13 @@
 
 
 export const mintNFTIcket = (nftContract: any, account: string) => {
+    console.log(`Minting on network ${account}`);
     nftContract.methods.createEventTickets([10,200,"Event",[65436536,"type1","url",[true]]]).send({from: account})
         .then(()=> {
             console.log("Tickets created")
         })
 }
+
 
 export const getInterval = async (nftContract: any, account: string) => {
     const interval = nftContract.methods.interval.call();
