@@ -45,12 +45,12 @@ const TicketCanvas = (props:any) => {
         const startX = image.width/10;
         const startY = image.height-(image.height/6);
         const increment = 40;
-        ctx.font = "30pt Calibri";
-        ctx.fillText("Metadata", startX  , startY );
+        // ctx.font = "30pt Calibri";
+        // ctx.fillText("Metadata", startX  , startY );
         ctx.font = "22pt Calibri";
-        ctx.fillText(`Event name: ${eventMetadata.eventName?eventMetadata.eventName:'-'}`, startX, startY + increment)
-        ctx.fillText(`Unit price: ${eventMetadata.unitPrice?eventMetadata.unitPrice+' $':'-'}`, startX, startY + 2*increment)
-        ctx.fillText(`Max supply: ${eventMetadata.maxSupply?eventMetadata.maxSupply:'-'}`, startX, startY + 3*increment)
+        ctx.fillText(`Event name: ${eventMetadata.eventName?eventMetadata.eventName:'-'}`, startX, startY )
+        ctx.fillText(`Unit price: ${eventMetadata.unitPrice?eventMetadata.unitPrice+' $':'-'}`, startX, startY + 1*increment)
+        ctx.fillText(`Max supply: ${eventMetadata.maxSupply?eventMetadata.maxSupply:'-'}`, startX, startY + 2*increment)
 
 
     }

@@ -6,7 +6,6 @@ import TicketGenerator from "./components/TicketGenerator";
 import {Button, Col, Row} from "react-bootstrap";
 
 
-
 function App() {
 
     const [web3, setWeb3] = useState<any>(null)
@@ -60,7 +59,7 @@ function App() {
 
   return (
     <div className="container-fluid">
-        <NFTicketsNavbar/>
+
         <Row>
             <Col>
                 <h4>Connection state : {web3!=null?<span>Connected</span>:<span>Not Connected</span>}</h4>
@@ -78,8 +77,9 @@ function App() {
                 <Button onClick={connectToMetamask}>Connect your wallet</Button>
             </Col>
         </Row>
-        {loadingBlockchainData && <h2>Loading blockchain data... </h2>}
-        {!loadingBlockchainData && <TicketGenerator props={{account: account, contract: contract}}/>}
+        <h1>Welcome to NFTickets</h1>
+        {/*{loadingBlockchainData && <h2>Loading blockchain data... </h2>}*/}
+        {/*{!loadingBlockchainData && <TicketGenerator props={{account: account, contract: contract}}/>}*/}
     </div>
   );
 }
