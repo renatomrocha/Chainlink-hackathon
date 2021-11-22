@@ -12,17 +12,8 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     uint public lastTimeStamp;
 
 
-    struct CustomTicketState {
-        bool expired;
-    }
 
-    struct CustomTicketMetadata {
-        uint eventDate; // Needs conversion from input date to UNIX timestamp
-        string ticketType;
-        string imageUrl;
-        CustomTicketState state;
-        // Add metadata...
-    }
+
 
     struct CustomTicket {
         address owner;
@@ -37,6 +28,19 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         string eventDesc;
         CustomTicketMetadata metadata;
     }
+
+     struct CustomTicketMetadata {
+        uint eventDate; // Needs conversion from input date to UNIX timestamp
+        string ticketType;
+        string imageUrl;
+        CustomTicketState state;
+        // Add metadata...
+    }
+
+    struct CustomTicketState {
+        bool expired;
+    }
+
 
     mapping(uint256=>CustomTicket) public nfTickets;
 

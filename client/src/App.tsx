@@ -2,20 +2,19 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import NFTContract, {loadBlockchainData, connectWallet, initContract} from './modules/web3_utils'
 import NFTicketsNavbar from "./components/Navbar";
-import {getInterval, getTicketsOwned, mintNFTIcket, numTicketsOwned} from "./modules/nfticket_utils";
+import TicketGenerator from "./components/TicketGenerator";
+import {Button, Col, Row} from "react-bootstrap";
 
-import Canvas from './modules/image_processing';
-import ipfsClient from './modules/ipfs_utils';
 
 
 function App() {
-
-
 
     const [web3, setWeb3] = useState<any>(null)
     const [network, setNetwork] = useState<any>(null)
     const [account, setAccount] = useState<any>(null)
     const [contract, setContract] = useState<any>(null);
+
+    const [loadingBlockchainData, setLoadingBlockchainData] = useState<boolean>(false);
 
 
 
@@ -30,9 +29,12 @@ function App() {
     }
 
     useEffect(()=> {
+        console.log("Loading data from blockchain...");
+        setLoadingBlockchainData(true);
         loadBlockchainData()
             .then((data)=> {
                 updateConnectionCallback(data);
+                setLoadingBlockchainData(false);
                 if(web3!== null) {
                     console.log("Starting contract")
                     const initializedContract = initContract(web3,NFTContract);
@@ -42,6 +44,7 @@ function App() {
                 }
             })
     }, [])
+
 
     const connectToMetamask = ()=> {
         connectWallet()
@@ -56,20 +59,27 @@ function App() {
 
 
   return (
-    <div className="container">
+    <div className="container-fluid">
         <NFTicketsNavbar/>
-        <h1>You are connected to {network} network</h1>
-        <h2>Your account is: {account}</h2>
-        <div>
-        <Canvas props={{uri:"http://bafybeigblofriz5b4zg4xil45t36snirvpzvja63r2yxybwm5ncuphane4.ipfs.localhost:8080/", badge_uri:"http://bafybeie6j2dwmpkcsmg3anx3v3oj4ojogndw3lcmylq6z6wgr3btcschrm.ipfs.localhost:8080/"}}></Canvas>
-        </div>
-            {/*<img src={"http://bafybeigblofriz5b4zg4xil45t36snirvpzvja63r2yxybwm5ncuphane4.ipfs.localhost:8080/"}></img>*/}
-        <div>
-        <button onClick={connectToMetamask}>Connect your wallet</button>
-        <button onClick={()=> mintNFTIcket(contract, account)}>Mint tickets</button>
-        <button onClick={()=> getInterval(contract, account)}>Interval</button>
-        <button onClick={()=> getTicketsOwned(contract, account)}>Tickets owned</button>
-        </div>
+        <Row>
+            <Col>
+                <h4>Connection state : {web3!=null?<span>Connected</span>:<span>Not Connected</span>}</h4>
+                {network!=null &&
+                    <div>
+                    <p>Current network: {network}</p>
+                    <p>Connected account: {account}</p>
+                    </div>
+                        }
+                {network == null &&
+                <p>No connection found</p>}
+
+            </Col>
+            <Col>
+                <Button onClick={connectToMetamask}>Connect your wallet</Button>
+            </Col>
+        </Row>
+        {loadingBlockchainData && <h2>Loading blockchain data... </h2>}
+        {!loadingBlockchainData && <TicketGenerator props={{account: account, contract: contract}}/>}
     </div>
   );
 }
