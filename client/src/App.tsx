@@ -5,10 +5,12 @@ import NFTicketsNavbar from "./components/Navbar";
 import {getInterval, getTicketsOwned, mintNFTIcket, numTicketsOwned} from "./modules/nfticket_utils";
 
 import Canvas from './modules/image_processing';
-const IpfsAPI = require('ipfs-api');
+import ipfsClient from './modules/ipfs_utils';
 
 
 function App() {
+
+
 
     const [web3, setWeb3] = useState<any>(null)
     const [network, setNetwork] = useState<any>(null)
@@ -51,6 +53,7 @@ function App() {
                 }
             })
     }
+
 
   return (
     <div className="container">
