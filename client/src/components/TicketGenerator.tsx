@@ -1,4 +1,4 @@
-import TicketCanvas from "../modules/TicketCanvas";
+import TicketCanvas from "./TicketCanvas";
 import {getInterval, getTicketsOwned, mintNFTIcket} from "../modules/nfticket_utils";
 import React from "react";
 import {Button} from "react-bootstrap";

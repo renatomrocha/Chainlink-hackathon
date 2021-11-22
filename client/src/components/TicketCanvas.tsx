@@ -1,5 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react'
-import {uploadToIPFS} from './ipfs_utils';
+import {uploadToIPFS} from '../modules/ipfs_utils';
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
 
 const TicketCanvas = (props:any) => {
