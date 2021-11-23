@@ -10,8 +10,13 @@ export const mintNFTIcket = (nftContract: any, account: string) => {
 
 
 export const getInterval = async (nftContract: any, account: string) => {
-    const interval = nftContract.methods.interval.call();
+    const interval = nftContract.methods.interval.call().call();
     console.log("Interval is: ", interval);
+}
+
+export const getCounter = async (nftContract: any) => {
+    const counter = await nftContract.methods.counter.call().call();
+    console.log("Counter value is: ", counter)
 }
 
 export const getTicketsOwned = async (nftContract: any, account: string) => {

@@ -25,6 +25,7 @@ function App() {
         if (web3 != null) {
             const initializedContract = initContract(web3,NFTContract);
             setContract(initializedContract)
+            console.log("Contract set to ", contract);
         }
 
     }
@@ -39,6 +40,7 @@ function App() {
         <BrowserRouter>
             <NFTicketsNavbar onStateChange={handleStateChange} />
             {network && <div><p>Connected to {network}</p><p>Your address is: {account}</p></div>}
+            {contract && <p>Connected to contract</p>}
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="create-tickets" element={<TicketGenerator account={account} network={network} contract={contract}/>} />

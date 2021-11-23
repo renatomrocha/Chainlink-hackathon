@@ -1,5 +1,5 @@
 import TicketCanvas from "./TicketCanvas";
-import {getInterval, getTicketsOwned, mintNFTIcket} from "../modules/nfticket_utils";
+import {getCounter, getInterval, getTicketsOwned, mintNFTIcket} from "../modules/nfticket_utils";
 import React from "react";
 import {Button} from "react-bootstrap";
 
@@ -16,7 +16,9 @@ const TicketGenerator = (props: any) => {
         <Button onClick={()=> mintNFTIcket(props.contract, props.account)}>Mint tickets</Button>
         <Button onClick={()=> getInterval(props.contract, props.account)}>Interval</Button>
         <Button onClick={()=> getTicketsOwned(props.contract, props.account)}>Tickets owned</Button>
-            </div>
+        <Button onClick={()=> getCounter(props.contract)}>Counter</Button>
+
+        </div>
         </div>
     )
 
