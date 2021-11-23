@@ -1,15 +1,15 @@
 import * as NFTTicketContract from '../artifacts/contracts/NFTickets.json';
 import Web3 from "web3";
-
 declare const window :any;
 
+const MUMBAI_CONTRACT_ADDRESS = "0x0c7861dc982B2B2BA2f5f56d286617C6cb727aFD";
 
 export const initContract = (web3: any, contractDefinition: any) => {
     console.log("Deploying contract with web3: ", web3);
     const networkId = web3.eth.net.getId()
     const abi = contractDefinition.default.abi;
     console.log("COntract definition is: ", contractDefinition)
-    const contractAddress = '0xBDC439c3a5b7B18B8044AFc1DfeCF0513040d5A5'
+    const contractAddress = MUMBAI_CONTRACT_ADDRESS
     const contract: any = new web3.eth.Contract(abi, contractAddress)
     console.log("Contract after init is: ", contract);
     return contract;

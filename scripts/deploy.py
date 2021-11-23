@@ -1,19 +1,19 @@
-from brownie import TicketFactory, accounts, network, config
+from brownie import NFTickets, accounts, network, config
 from scripts.helpful_scripts import get_account, LOCAL_BLOCKCHAIN_ENVIRONMENTS
 from web3 import Web3
 
 
 
-def deploy_ticket_factory():
+def deploy_nfticket_factory():
     account = get_account()
 
-    ticket_factory = TicketFactory.deploy({"from": account}, publish_source=config["networks"][network.show_active()]["verify"])
-    print(f"Contract deployed to {ticket_factory.address}")
-    return ticket_factory
+    nfticket_factory = NFTickets.deploy(10, {"from": account}, publish_source=config["networks"][network.show_active()]["verify"])
+    print(f"Contract deployed to {nfticket_factory.address}")
+    return nfticket_factory
 
 
 def main():
-    ticket_factory = deploy_ticket_factory()
+    nfticket_factory = deploy_nfticket_factory()
 
 
 
