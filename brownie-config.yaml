@@ -8,6 +8,12 @@ autofetch_sources: True
 dotenv: .env
 
 networks:
+#  networks:
+#    mumbai_moralis:
+#      host: https://speedy-nodes-nyc.moralis.io/9974efbb9dfbbd6922950e4b/polygon/mumbai/archive
+
+
+
   default: development
   development:
     cmd_settings:
@@ -26,6 +32,10 @@ networks:
 
     verify: False
     update_interval: 60
+
+  mumbai_moralis_3:
+    verify: False
+
 
 
 wallets:
