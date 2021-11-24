@@ -6,24 +6,33 @@ import "smartcontractkit/chainlink-brownie-contracts@0.2.2/contracts/src/v0.8/in
 
 contract NFTickets is ERC1155, KeeperCompatibleInterface {
     uint256 private _currentEventId = 0;
+
     // Keeper variables
     uint256 public immutable interval;
     uint256 public lastTimeStamp;
-    uint256 public counter;
+    uint256 public keeperVerificationCounter = 0;
+    uint256 public updatesCounter = 0;
+    uint256[] private _updatedTickets;
+
 
 
     struct CustomTicket {
         address owner;
         uint256 tokenSalePrice;
         uint256 maxSupply;
+        uint percentageOnResale;
+        uint256 expirationDateTimestamp;
         string metadataURI; // IPFS URI that contains event name, description, Ticket type, image url.
         bool expired;
     }
 
     mapping(address => uint256) private revenue;
 
-    mapping(uint256 => CustomTicket) public nfTickets;
+    mapping(address => CustomTicket[]) public ownedTickets;
 
+
+
+    mapping(uint256 => CustomTicket) public nfTickets;
 
     constructor(uint256 updateInterval)
         ERC1155("https://localhost/NFTickets/{id}.json")
@@ -37,18 +46,27 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     // Event for tickets updated
     event TicketsUpdated(uint256[] _tokenIds);
 
-    function batchCreateEventTickets(CustomTicket[] memory customTickets)
-        public
-    {
-        for (uint256 i; i < customTickets.length; i++) {
-            CustomTicket memory _ticket = customTickets[i];
-            createEventTickets(
-                _ticket.tokenSalePrice,
-                _ticket.maxSupply,
-                _ticket.metadataURI
-            );
-        }
+
+       // Getter
+    function getOwnedTickets(address _account) public view returns(CustomTicket[] memory){
+        return ownedTickets[_account];
     }
+
+
+
+    //TODO change this
+//    function batchCreateEventTickets(CustomTicket[] memory customTickets)
+//        public
+//    {
+//        for (uint256 i; i < customTickets.length; i++) {
+//            CustomTicket memory _ticket = customTickets[i];
+//            createEventTickets(
+//                _ticket.tokenSalePrice,
+//                _ticket.maxSupply,
+//                _ticket.metadataURI
+//            );
+//        }
+//    }
 
     /// @dev Function mints a token for a new event
     /// @param _tokenSalePrice denotes the price of a single ticket
@@ -57,6 +75,8 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     function createEventTickets(
         uint256 _tokenSalePrice,
         uint256 _maxSupply,
+        uint _percentageOnResale,
+        uint256 _expirationDateTimestamp,
         string memory _metadataURI
     ) public {
         CustomTicket memory _newTicket;
@@ -66,11 +86,14 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         _newTicket.maxSupply = _maxSupply;
         _newTicket.metadataURI = _metadataURI;
         _newTicket.expired = false;
-
+        _newTicket.percentageOnResale = _percentageOnResale;
+        _newTicket.expirationDateTimestamp = _expirationDateTimestamp;
         nfTickets[_currentEventId] = _newTicket;
 
         //Here we can try to use VRF and _mint a few "special tokens"??
         _mint(msg.sender, _currentEventId, _maxSupply, "");
+
+        ownedTickets[msg.sender].push(_newTicket);
 
         emit TicketCreation(_currentEventId, _tokenSalePrice);
         _currentEventId += 1;
@@ -111,35 +134,35 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         /// @dev gaurd against re-entrancy
     }
 
-    // -------- Integrate token URI
+    // -------- Integrate token URI (No longer required)
 
-    function setTokenUri(uint256 tokenId, string memory _tokenURI) public {
-        require(
-            msg.sender == nfTickets[tokenId].owner,
-            "Transfer caller is not owner nor approved"
-        );
-        nfTickets[tokenId].metadataURI = _tokenURI;
-    }
+//    function setTokenUri(uint256 tokenId, string memory _tokenURI) public {
+//        require(
+//            msg.sender == nfTickets[tokenId].owner,
+//            "Transfer caller is not owner nor approved"
+//        );
+//        nfTickets[tokenId].metadataURI = _tokenURI;
+//    }
 
 
     // -------- Keepers integration ------ Work in progress ... (TODO: Migrate ticket processing functions to own library)
 
-    function _getTicketsToUpdate(bytes memory performData)
+    function _updateTickets()
         private
-        view
-        returns (uint256[] memory)
     {
-        // Map tickets
-        // Verify which tickets eventDate < Keeper injected date
-        // return tickets
-        uint256[] memory tickets = new uint256[](0);
-        return tickets;
+        //TODO solve this issue to store which tickets are being updated
+        for (uint256 i =0; i < _currentEventId; i++) {
+            if (nfTickets[i].expirationDateTimestamp < block.timestamp && nfTickets[i].expired!=false) {
+                nfTickets[i].expired = true;
+                _updatedTickets.push(i);
+                updatesCounter = updatesCounter + 1;
+            }
+        }
+        // Emit event with updated Tickets
+        emit TicketsUpdated(_updatedTickets);
+        _updatedTickets = new uint256[](0);
     }
 
-    function _updateTickets(uint256[] memory ticketsToUpdate) private {
-        // Iterate over ticketsToUpdate
-        // Change required state
-    }
 
     function checkUpkeep(
         bytes calldata /* checkData */
@@ -149,12 +172,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     }
 
     function performUpkeep(bytes calldata performData) external override {
-        lastTimeStamp = block.timestamp;
-        counter = counter + 1;
-        //        uint256 _externalTimestamp = performData; // Change this to get timestamp from performData
-        //        uint256[] memory _nfTicketsToUpdate = _getTicketsToUpdate(performData);
-
-
-        // We don't use the performData in this example. The performData is generated by the Keeper's call to your checkUpkeep function
+        keeperVerificationCounter = keeperVerificationCounter + 1;
+        _updateTickets();
     }
 }
