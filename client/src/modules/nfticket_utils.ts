@@ -12,6 +12,7 @@ export const mintNFTicket = async (nftContract: any, account: string, data: any,
     const metadataDoc = JSON.stringify(metadata);
     const metadata_url = await uploadToIPFS(metadataDoc);
     console.log("Metadata url: ", metadata_url);
+    console.log("Making request with account: ", account);
     nftContract.methods.createEventTickets(data.unitPrice,data.maxSupply,data.percentageOnResale, expirationDateTimestamp.getTime(),metadata_url).send({from: account})
         .then(()=> {
             console.log("Tickets created")
@@ -30,8 +31,8 @@ export const subscribeTicketsUpdated = (nftContract: any) => {
 }
 
 
-export const getInterval = async (nftContract: any, account: string) => {
-    const interval = nftContract.methods.interval.call().call();
+export const getInterval = async (nftContract: any) => {
+    const interval = await nftContract.methods.interval.call().call();
     console.log("Interval is: ", interval);
 }
 

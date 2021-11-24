@@ -1,21 +1,17 @@
-import * as NFTTicketContract from '../artifacts/contracts/NFTickets.json';
+import * as NFTicketContract from '../artifacts/contracts/NFTickets.json';
 import Web3 from "web3";
 import detectEthereumProvider from "@metamask/detect-provider";
 declare const window :any;
 
-const MUMBAI_CONTRACT_ADDRESS = "0x40e6282442Ea51E2f56c08e2E5eA47106C3c0dA1";
+const MUMBAI_CONTRACT_ADDRESS = "0x7ECE6e43dB75455f517da88041a4480201fb9411";
 
 const MUMBAI_CONTRACT_ADDRESS_REMIX = "0x43f96e3d0B205D971C83F55481739F7807385fFE"
 
-export const initContract = (web3: any, contractDefinition: any) => {
-    console.log("Deploying contract with web3: ", web3);
-    const networkId = web3.eth.net.getId()
+export const initContract = (web3: any, contractSetter: Function, contractDefinition: any) => {
     const abi = contractDefinition.default.abi;
-    console.log("COntract definition is: ", contractDefinition)
     const contractAddress = MUMBAI_CONTRACT_ADDRESS
     const contract: any = new web3.eth.Contract(abi, contractAddress)
-    console.log("Contract after init is: ", contract);
-    return contract;
+    contractSetter(contract);
 }
 
 
@@ -29,7 +25,7 @@ export const loadBlockchainData = async () => {
     return {"web3":web3,"network":network,"accounts":accounts}
 }
 
-export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunction:any, chainUpdateFunction:any) => {
+export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunction:any, chainUpdateFunction:any, contractUpdateFunction: any) => {
     let provider : any;
     let web3: any;
     let accounts: string[] = [];
@@ -50,13 +46,18 @@ export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunctio
         web3 = new Web3("http://localhost:8545"); // Local Ganache
     }
     web3UpdateFunction(web3);
-    
+
+    const abi = (NFTicketContract as any).default.abi;
+    const contractAddress = MUMBAI_CONTRACT_ADDRESS
+    const contract: any = new web3.eth.Contract(abi, contractAddress)
+    contractUpdateFunction(contract);
+
 
     // Set Account and change event listener
     accounts = await provider.request({method:'eth_requestAccounts'})
-    accountUpdateFunction(accounts);
+    accountUpdateFunction(accounts[0]);
     web3.currentProvider.on('accountsChanged', (account:any)=> {
-        accountUpdateFunction(account);
+        accountUpdateFunction(account[0]);
     })
         
     // Set Network and change event listener
@@ -68,4 +69,4 @@ export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunctio
 }
 
 
-export default NFTTicketContract;
+export default NFTicketContract;

@@ -2,7 +2,8 @@ import React, {useEffect, useState} from "react";
 import {getOwnedTickets} from "../modules/nfticket_utils";
 import {Button} from "react-bootstrap";
 import {IPFS_NODE_URL} from "../modules/ipfs_utils";
-
+import TicketDisplay from "./TicketDisplay";
+import axios from "axios";
 
 const MyTickets = (props: any) => {
 
@@ -26,44 +27,40 @@ const MyTickets = (props: any) => {
 
 
     const loadTickets = async() => {
-        const myTickets = await getOwnedTickets(props.contract, props.account);
-        setMyTickets(myTickets);
-        console.log("My tickets after get owned: ", myTickets);
-        myTickets.map((async (ticket:any) => {
+        console.log("Loading Tickets...");
+
+        let scTickets: any[] = await getOwnedTickets(props.contract, props.account);
+        let processedScTickets : any[] = [];
+        for(let a = 0; a<scTickets.length; a++) {
+            let key : any;
+            let ticketObj: any = new Object();
+            for (key in scTickets[a]) {
+            ticketObj[key.toString()] = scTickets[a][key];
+            }
+            processedScTickets.push(ticketObj);
+        }
+
+        for(let i = 0; i< processedScTickets.length; i++) {
+            // const ticket = Object.fromEntries(scTickets[i])
+            const ticket:any = processedScTickets[i];
             const urlPieces = ticket.metadataURI.split("/");
-            console.log("urlPieces: ", urlPieces)
             const uriPt1 = urlPieces[urlPieces.length -1];
             const finalUrl = IPFS_NODE_URL + "/api/v0/object/get?arg=" + uriPt1 + '&data-encoding=text';
-            console.log("Loading fron url: ", finalUrl);
-            const ticketsArray = [];
-            const promise = await fetch(finalUrl, {method: 'POST'});
-            const response = await promise;
+            const ticketRawMetadata = await axios.post(finalUrl);
+            const ticketMetadata = JSON.parse(processIpfsString(ticketRawMetadata.data.Data));
+            processedScTickets[i] = Object.assign(processedScTickets[i], {metadata: ticketMetadata});
+        }
+        setMyTickets(processedScTickets)
 
-
-            console.log("Response is: ", promise);
-                // .then(r=> r.json())
-                // .then(resp => {
-                //     const a = JSON.parse(processIpfsString(resp.Data));
-                //     ticketsArray.push()
-                //     ticketsArray.push({...ticket, metadata:a});
-                // });
-        }))
     }
-
 
     return (<div>
         <h2>My Tickets</h2>
         <Button onClick={loadTickets}>Load Tickets</Button>
-        {myTickets != null && myTickets.map((ticket:any) => {
+        {myTickets != null && myTickets.map((ticket:any, idx: number) => {
             console.log("Ticket is: ", ticket);
-                return <div key={ticket}>
-                    <p>Event name: {ticket.eventName}</p>
-                    <p>Maximum supply: {ticket.maxSupply}</p>
-                    <p>Price: {ticket.tokenSalePrice} $</p>
-
-                </div>
+                return <TicketDisplay  key={idx} ticket={ticket}/>
             })}
-
     </div>)
 }
 
