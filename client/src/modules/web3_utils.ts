@@ -1,5 +1,6 @@
 import * as NFTTicketContract from '../artifacts/contracts/NFTickets.json';
 import Web3 from "web3";
+import detectEthereumProvider from "@metamask/detect-provider";
 declare const window :any;
 
 const MUMBAI_CONTRACT_ADDRESS = "0x40e6282442Ea51E2f56c08e2E5eA47106C3c0dA1";
@@ -28,22 +29,42 @@ export const loadBlockchainData = async () => {
     return {"web3":web3,"network":network,"accounts":accounts}
 }
 
-export const connectWallet = async () => {
-    const provider : any = window.ethereum;
+export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunction:any, chainUpdateFunction:any) => {
+    let provider : any;
     let web3: any;
     let accounts: string[] = [];
-    if (typeof(provider) !== undefined) {
-        web3 = new Web3(provider)
-        console.log("Metamask is installed! ")
-        accounts = await provider.request({method:'eth_requestAccounts'})
-        window.ethereum.on('accountChanged', (accounts: string[])=> {
-            console.log("Account is: ",accounts);
-        })
+    let chainId: any;
+
+
+    // Initiate the Web3 Provider
+    provider = await detectEthereumProvider().catch((e:any) => {
+        window.alert(e.message);
+        console.warn("Unable to find waller");
+    })
+
+    // Set Web3
+    if (provider === window.ethereum) {
+        web3 = new Web3(provider);
+        console.log("Metamask is installed! ");
     } else {
-        console.warn("Unable to find waller")
+        web3 = new Web3("http://localhost:8545"); // Local Ganache
     }
-    const network = await web3.eth.net.getNetworkType()
-    return {"web3":web3,"network":network,"accounts":accounts}
+    web3UpdateFunction(web3);
+    
+
+    // Set Account and change event listener
+    accounts = await provider.request({method:'eth_requestAccounts'})
+    accountUpdateFunction(accounts);
+    web3.currentProvider.on('accountsChanged', (account:any)=> {
+        accountUpdateFunction(account);
+    })
+        
+    // Set Network and change event listener
+    chainId = await web3.eth.getChainId();
+    chainUpdateFunction(chainId);
+    web3.currentProvider.on("chainChanged", async (chain:any) => {
+        chainUpdateFunction(chain);
+    })
 }
 
 

@@ -13,32 +13,15 @@ function App() {
     const [web3, setWeb3] = useState<any>(null)
     const [network, setNetwork] = useState<any>(null)
     const [account, setAccount] = useState<any>(null)
-
     const [contract, setContract] = useState<any>(null);
 
-
-
-    const handleStateChange = (data: any) => {
-        setWeb3(data?.web3);
-        setNetwork(data?.network);
-        setAccount(data?.account);
-        if (web3 != null) {
-            const initializedContract = initContract(web3,NFTContract);
-            setContract(initializedContract)
-            console.log("Contract set to ", contract);
-        }
-
-    }
-
-
-
-
-
+    const web3States = [web3, account, network];
+    const maskUpdateFunctions = [setWeb3, setAccount, setNetwork];
 
   return (
     <div className="container-fluid">
         <BrowserRouter>
-            <NFTicketsNavbar onStateChange={handleStateChange} />
+            <NFTicketsNavbar maskUpdateFunctions={maskUpdateFunctions} web3States={web3States}/>
             {network && <div><p>Connected to {network}</p><p>Your address is: {account}</p></div>}
             {contract && <p>Connected to contract</p>}
             <Routes>
@@ -49,10 +32,6 @@ function App() {
             </Routes>
         </BrowserRouter>
 
-
-
-        {/*{loadingBlockchainData && <h2>Loading blockchain data... </h2>}*/}
-        {/*{!loadingBlockchainData && <TicketGenerator props={{account: account, contract: contract}}/>}*/}
     </div>
   );
 }

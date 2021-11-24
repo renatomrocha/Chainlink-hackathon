@@ -7,9 +7,9 @@ import NFTContract, {loadBlockchainData, connectWallet, initContract} from '../m
 
 export default function NFTicketsNavbar(props: any) {
 
-    const [web3, setWeb3] = useState<any>(null)
-    const [network, setNetwork] = useState<any>(null)
-    const [account, setAccount] = useState<any>(null)
+    // const [web3, setWeb3] = useState<any>(null)
+    // const [network, setNetwork] = useState<any>(null)
+    // const [account, setAccount] = useState<any>(null)
 
     const [loadingBlockchainData, setLoadingBlockchainData] = useState<boolean>(false);
 
@@ -24,37 +24,33 @@ export default function NFTicketsNavbar(props: any) {
     // }, [])
 
 
-    function passDataToParent(){
-        const buildOutputData = {"web3":web3, "account":account, "network" : network};
-        props.onStateChange(buildOutputData) // the name of props we pass from top component
-    }
+    // function passDataToParent(){
+    //     const buildOutputData = {"web3":web3, "account":account, "network" : network};
+    //     props.onStateChange(buildOutputData) // the name of props we pass from top component
+    // }
 
-    async function connectLocalBlockchain(){
-        console.log("Loading data from blockchain...");
-        setLoadingBlockchainData(true);
-        const data = await loadBlockchainData();
-        updateConnectionCallback(data);
-        setLoadingBlockchainData(false);
-    }
+    // async function connectLocalBlockchain(){
+    //     console.log("Loading data from blockchain...");
+    //     setLoadingBlockchainData(true);
+    //     const data = await loadBlockchainData();
+    //     updateConnectionCallback(data);
+    //     setLoadingBlockchainData(false);
+    // }
 
-    const updateConnectionCallback = (data: {"web3": any, "network": string, "accounts": string[]}) => {
-        console.log("Will upload with data: ", data);
-        setWeb3(data.web3)
-        setNetwork(data["network"])
-        setAccount(data["accounts"][0])
-        passDataToParent()
-        console.log("Web3 is: ", web3);
-        console.log("Network is: ", network);
-        console.log("Account is: ", account);
-    }
+    // const updateConnectionCallback = (data: {"web3": any, "network": string, "accounts": string[]}) => {
+    //     console.log("Will upload with data: ", data);
+    //     setWeb3(data.web3)
+    //     setNetwork(data["network"])
+    //     setAccount(data["accounts"][0])
+    //     passDataToParent()
+    //     console.log("Web3 is: ", web3);
+    //     console.log("Network is: ", network);
+    //     console.log("Account is: ", account);
+    // }
 
 
-    const connectToMetamask = ()=> {
-        connectWallet()
-            .then((data)=> {
-                updateConnectionCallback(data);
-                console.log("Connecting to metamask!");
-            })
+    const connectToMetamask = async()=> {
+        await connectWallet(props.maskUpdateFunctions[0],props.maskUpdateFunctions[1],props.maskUpdateFunctions[2]);
     }
 
 
@@ -78,7 +74,7 @@ export default function NFTicketsNavbar(props: any) {
     {/*</NavDropdown>*/}
 
 
-    <span>Connection state : {web3!=null?<span>Connected</span>:<span>Not Connected</span>}</span>
+    <span>Connection state : {props.web3States[0]!=null?<span>Connected</span>:<span>Not Connected</span>}</span>
     {/*{network!=null &&*/}
     {/*<div>*/}
     {/*    <p>Current network: {network}</p>*/}
@@ -90,7 +86,7 @@ export default function NFTicketsNavbar(props: any) {
 
 
         <Button onClick={connectToMetamask}>Connect your wallet</Button>
-        <Button onClick={connectLocalBlockchain}>Connect local</Button>
+        {/* <Button onClick={connectLocalBlockchain}>Connect local</Button> */}
 
     </Nav>
     </Navbar.Collapse>

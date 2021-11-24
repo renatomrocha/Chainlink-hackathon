@@ -14,13 +14,11 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     uint256 public updatesCounter = 0;
     uint256[] private _updatedTickets;
 
-
-
     struct CustomTicket {
         address owner;
         uint256 tokenSalePrice;
         uint256 maxSupply;
-        uint percentageOnResale;
+        uint256 percentageOnResale;
         uint256 expirationDateTimestamp;
         string metadataURI; // IPFS URI that contains event name, description, Ticket type, image url.
         bool expired;
@@ -29,8 +27,6 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     mapping(address => uint256) private revenue;
 
     mapping(address => CustomTicket[]) public ownedTickets;
-
-
 
     mapping(uint256 => CustomTicket) public nfTickets;
 
@@ -46,27 +42,31 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     // Event for tickets updated
     event TicketsUpdated(uint256[] _tokenIds);
 
-
-       // Getter
-    function getOwnedTickets(address _account) public view returns(CustomTicket[] memory){
+    // Getter
+    function getOwnedTickets(address _account)
+        public
+        view
+        returns (CustomTicket[] memory)
+    {
         return ownedTickets[_account];
     }
 
-
-
-    //TODO change this
-//    function batchCreateEventTickets(CustomTicket[] memory customTickets)
-//        public
-//    {
-//        for (uint256 i; i < customTickets.length; i++) {
-//            CustomTicket memory _ticket = customTickets[i];
-//            createEventTickets(
-//                _ticket.tokenSalePrice,
-//                _ticket.maxSupply,
-//                _ticket.metadataURI
-//            );
-//        }
-//    }
+    /// @dev Function mints a bunch of tokens at a time
+    /// @param customTickets An array of tickets. Although the function does not use the owner and expired attributeds of the array element, it still needs to be passed with a dummy value
+    function batchCreateEventTickets(CustomTicket[] memory customTickets)
+        public
+    {
+        for (uint256 i; i < customTickets.length; i++) {
+            CustomTicket memory _ticket = customTickets[i];
+            createEventTickets(
+                _ticket.tokenSalePrice,
+                _ticket.maxSupply,
+                _ticket.percentageOnResale,
+                _ticket.expirationDateTimestamp,
+                _ticket.metadataURI
+            );
+        }
+    }
 
     /// @dev Function mints a token for a new event
     /// @param _tokenSalePrice denotes the price of a single ticket
@@ -75,7 +75,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     function createEventTickets(
         uint256 _tokenSalePrice,
         uint256 _maxSupply,
-        uint _percentageOnResale,
+        uint256 _percentageOnResale,
         uint256 _expirationDateTimestamp,
         string memory _metadataURI
     ) public {
@@ -125,34 +125,42 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         _safeTransferFrom(_owner, msg.sender, _tokenId, _numberOfTickets, "");
     }
 
+    /// @dev Allows a user to see their revenue
+    function showProceeds() public view returns (uint256) {
+        return revenue[msg.sender];
+    }
+
     /// @dev Allows event owners to withdraw all their earnings
-    /// @param _amount Amount that the event owner wishes to withdraw
-    function withdrawProceeds(uint256 _amount) public {
-        //TODO: Allow owner to withdraw after verifying the following conditions
-        /// @dev revenue is non-zero
-        /// @dev sender wishes to withdraw less than his total revenue
-        /// @dev gaurd against re-entrancy
+    function withdrawProceeds() public {
+        uint256 _totalProceeds = revenue[msg.sender];
+
+        require(_totalProceeds > 0, "No revenues so far");
+
+        revenue[msg.sender] = 0;
+        (bool sent, ) = msg.sender.call{value: _totalProceeds}("");
+
+        require(sent, "Failed to send ether");
     }
 
     // -------- Integrate token URI (No longer required)
 
-//    function setTokenUri(uint256 tokenId, string memory _tokenURI) public {
-//        require(
-//            msg.sender == nfTickets[tokenId].owner,
-//            "Transfer caller is not owner nor approved"
-//        );
-//        nfTickets[tokenId].metadataURI = _tokenURI;
-//    }
-
+    //    function setTokenUri(uint256 tokenId, string memory _tokenURI) public {
+    //        require(
+    //            msg.sender == nfTickets[tokenId].owner,
+    //            "Transfer caller is not owner nor approved"
+    //        );
+    //        nfTickets[tokenId].metadataURI = _tokenURI;
+    //    }
 
     // -------- Keepers integration ------ Work in progress ... (TODO: Migrate ticket processing functions to own library)
 
-    function _updateTickets()
-        private
-    {
+    function _updateTickets() private {
         //TODO solve this issue to store which tickets are being updated
-        for (uint256 i =0; i < _currentEventId; i++) {
-            if (nfTickets[i].expirationDateTimestamp < block.timestamp && nfTickets[i].expired!=false) {
+        for (uint256 i = 0; i < _currentEventId; i++) {
+            if (
+                nfTickets[i].expirationDateTimestamp < block.timestamp &&
+                nfTickets[i].expired != false
+            ) {
                 nfTickets[i].expired = true;
                 _updatedTickets.push(i);
                 updatesCounter = updatesCounter + 1;
@@ -162,7 +170,6 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         emit TicketsUpdated(_updatedTickets);
         _updatedTickets = new uint256[](0);
     }
-
 
     function checkUpkeep(
         bytes calldata /* checkData */
