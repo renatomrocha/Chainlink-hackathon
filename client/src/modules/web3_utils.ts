@@ -2,7 +2,9 @@ import * as NFTTicketContract from '../artifacts/contracts/NFTickets.json';
 import Web3 from "web3";
 declare const window :any;
 
-const MUMBAI_CONTRACT_ADDRESS = "0x5bC1181674EbD937d581647289D39Ec9e81D07a6";
+const MUMBAI_CONTRACT_ADDRESS = "0x40e6282442Ea51E2f56c08e2E5eA47106C3c0dA1";
+
+const MUMBAI_CONTRACT_ADDRESS_REMIX = "0x43f96e3d0B205D971C83F55481739F7807385fFE"
 
 export const initContract = (web3: any, contractDefinition: any) => {
     console.log("Deploying contract with web3: ", web3);

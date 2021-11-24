@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
 import NFTicketsNavbar from "./components/Navbar";
-import TicketGenerator from "./components/TicketGenerator";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import MyTickets from "./components/MyTickets";
 import Home from "./components/Home";
 import NFTContract, {initContract} from "./modules/web3_utils";
+import TicketCanvas from "./components/TicketCanvas";
 
 
 function App() {
@@ -43,8 +43,9 @@ function App() {
             {contract && <p>Connected to contract</p>}
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="create-tickets" element={<TicketGenerator account={account} network={network} contract={contract}/>} />
-                <Route path="my-tickets" element={<MyTickets />} />
+                <Route path="create-tickets" element={<TicketCanvas account={account} network={network} contract={contract}
+                                                                    uri="http://bafybeigblofriz5b4zg4xil45t36snirvpzvja63r2yxybwm5ncuphane4.ipfs.localhost:8080/"/>} />
+                <Route path="my-tickets" element={<MyTickets account={account} network={network} contract={contract}/>} />
             </Routes>
         </BrowserRouter>
 

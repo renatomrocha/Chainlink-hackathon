@@ -1,6 +1,6 @@
 import ipfsHttpClient, { create } from 'ipfs-http-client';
 
-const IPFS_NODE_URL = 'https://ipfs.infura.io:5001'
+export const IPFS_NODE_URL = 'https://ipfs.infura.io:5001'
 
 const ipfsClient = create({url: IPFS_NODE_URL})
 

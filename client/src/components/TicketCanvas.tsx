@@ -1,10 +1,14 @@
 import React, {useRef, useEffect, useState} from 'react'
 import {uploadToIPFS} from '../modules/ipfs_utils';
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import {mintNFTicket} from "../modules/nfticket_utils";
+// @ts-ignore
+import DatePicker from "react-datepicker";
 
+import "react-datepicker/dist/react-datepicker.css";
 const TicketCanvas = (props:any) => {
 
-    console.log("Received props: ", props.props);
+    console.log("Received props: ", props);
     const [badgerUrl,setBadgerUrl] = useState<any>(null);
     const [uploadedBadgeUrl, setUploadedBadgeUrl] = useState<any>(null);
     const [currentBadgeFile, setCurrentBadgeFile] = useState<any>(null);
@@ -15,6 +19,9 @@ const TicketCanvas = (props:any) => {
 
     //Form states
     const [eventMetadata, setEventMetadata] = useState<any>({});
+    const [eventData, setEventData] = useState<any>({});
+    const [expirationDateTimestamp, setExpirationDateTimestamp] = useState(new Date());
+
 
 
     const styles = {
@@ -29,14 +36,10 @@ const TicketCanvas = (props:any) => {
         ctx.canvas.width = image.width
         ctx.canvas.height = image.height
         ctx.drawImage(image,0,0);
-        // ctx.fillStyle = "#ffffff";
-        // ctx.arc(image.width/4, image.height/3, 100, 0, 2* Math.PI);
-
         if (badge !== null) {
             ctx.drawImage(badge, image.width/4 - badge.width/2, image.height/3-badge.height/2, 200, 200)
             printMetadata(canvas, image);
         }
-
     }
 
 
@@ -45,12 +48,11 @@ const TicketCanvas = (props:any) => {
         const startX = image.width/10;
         const startY = image.height-(image.height/6);
         const increment = 40;
-        // ctx.font = "30pt Calibri";
-        // ctx.fillText("Metadata", startX  , startY );
         ctx.font = "22pt Calibri";
         ctx.fillText(`Event name: ${eventMetadata.eventName?eventMetadata.eventName:'-'}`, startX, startY )
-        ctx.fillText(`Unit price: ${eventMetadata.unitPrice?eventMetadata.unitPrice+' $':'-'}`, startX, startY + 1*increment)
-        ctx.fillText(`Max supply: ${eventMetadata.maxSupply?eventMetadata.maxSupply:'-'}`, startX, startY + 2*increment)
+        ctx.fillText(`Unit price: ${eventData.unitPrice?eventData.unitPrice+' $':'-'}`, startX, startY + 1*increment)
+        ctx.fillText(`Max supply: ${eventData.maxSupply?eventData.maxSupply:'-'}`, startX, startY + 2*increment)
+        ctx.fillText(`Percentage on resale: ${eventData.percentageOnResale?eventData.percentageOnResale:'-'}`, startX, startY + 3*increment)
 
 
     }
@@ -91,20 +93,25 @@ const TicketCanvas = (props:any) => {
         setEventMetadata(Object.assign(eventMetadata,{"eventName": event.target.value}));
         console.log("Metadata now is: ", eventMetadata);
         updateImage()
+
     }
 
     const changeEventUnitPriceHandler = (event:any) => {
-        setEventMetadata(Object.assign(eventMetadata,{"unitPrice": event.target.value}));
+        setEventData(Object.assign(eventMetadata,{"unitPrice": event.target.value}));
         console.log("Metadata now is: ", eventMetadata);
         updateImage()
     }
 
     const changeEventMaxSupplyHandler = (event:any) => {
-        setEventMetadata(Object.assign(eventMetadata,{"maxSupply": event.target.value}));
+        setEventData(Object.assign(eventMetadata,{"maxSupply": event.target.value}));
         console.log("Metadata now is: ", eventMetadata);
         updateImage()
     }
 
+    const changeEventResalePercHandler = (event: any) => {
+        setEventData(Object.assign(eventMetadata,{"percentageOnResale": event.target.value}));
+        updateImage()
+    }
 
     useEffect(() => {
         console.log("Running use effect")
@@ -121,7 +128,7 @@ const TicketCanvas = (props:any) => {
             <Row>
                 <Col>
                     <canvas className="align-self-center" ref={canvasRef} {...props}/>
-                    <img ref={imageRef} src={props.props.uri} hidden={true} />
+                    <img ref={imageRef} src={props.uri} hidden={true} />
                     <img ref={badgeRef} src={uploadedBadgeUrl} hidden={true} />
                 </Col>
 
@@ -136,9 +143,6 @@ const TicketCanvas = (props:any) => {
                         <Form.Group className="mb-3" controlId="formEventName">
                             <Form.Label>Event name</Form.Label>
                             <Form.Control type="event_name" placeholder="Enter event name" value={eventMetadata.eventName} onChange={changeEventNameHandler}/>
-                            {/*<Form.Text className="text-muted">*/}
-                            {/*    We'll never share your email with anyone else.*/}
-                            {/*</Form.Text>*/}
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="formUnitPrice">
@@ -146,16 +150,17 @@ const TicketCanvas = (props:any) => {
                             <Form.Control type="unit_price" placeholder="Uni price in dollars"  value={eventMetadata.unitPrice} onChange={changeEventUnitPriceHandler}/>
                         </Form.Group>
 
-                        {/*<Form.Group className="mb-3" controlId="formUnitPrice">*/}
-                        {/*    <Form.Label>Unit Price</Form.Label>*/}
-                        {/*    <Form.Control type="unit_price" placeholder="Unit price in dollars" />*/}
-                        {/*</Form.Group>*/}
-
                         <Form.Group className="mb-3" controlId="formMaxSupply">
                             <Form.Label>Maximum supply</Form.Label>
                             <Form.Control type="max_supply" placeholder="Maximum ticket supply" value={eventMetadata.maxSupply} onChange={changeEventMaxSupplyHandler}/>
                         </Form.Group>
 
+                        <Form.Group className="mb-3" controlId="formMaxSupply">
+                            <Form.Label>Percentage on resale</Form.Label>
+                            <Form.Control type="perc_resale" placeholder="Percentage on resale" value={eventMetadata.percentageOnResale} onChange={changeEventResalePercHandler}/>
+                        </Form.Group>
+
+                        <DatePicker selected={expirationDateTimestamp} onChange={(date: any) => setExpirationDateTimestamp(date)} />
                     </Form>
                     <Row className="mt-3">
                         <Col>
@@ -167,6 +172,9 @@ const TicketCanvas = (props:any) => {
                     </Row>
                 </Col>
                 </Row>
+            <div>
+                <Button onClick={()=> mintNFTicket(props.contract, props.account, eventData, eventMetadata, expirationDateTimestamp,currentBadgeFile)}>Mint tickets</Button>
+            </div>
         </Container>)
 }
 
