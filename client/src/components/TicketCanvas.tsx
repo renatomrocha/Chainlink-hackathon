@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react'
-import {uploadToIPFS} from '../modules/ipfs_utils';
+import {BASE_IMAGE_URL, uploadToIPFS} from '../modules/ipfs_utils';
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
-import {mintNFTicket} from "../modules/nfticket_utils";
+import {getInterval, getkeeperVerificationCounter, getUpdatesCounter, mintNFTicket} from "../modules/nfticket_utils";
 // @ts-ignore
 import DatePicker from "react-datepicker";
 
@@ -89,27 +89,25 @@ const TicketCanvas = (props:any) => {
     }
 
     const changeEventNameHandler = (event:any) => {
-
         setEventMetadata(Object.assign(eventMetadata,{"eventName": event.target.value}));
         console.log("Metadata now is: ", eventMetadata);
         updateImage()
-
     }
 
     const changeEventUnitPriceHandler = (event:any) => {
-        setEventData(Object.assign(eventMetadata,{"unitPrice": event.target.value}));
-        console.log("Metadata now is: ", eventMetadata);
+        setEventData(Object.assign(eventData,{"unitPrice": event.target.value}));
+        console.log("Metadata now is: ", eventData);
         updateImage()
     }
 
     const changeEventMaxSupplyHandler = (event:any) => {
-        setEventData(Object.assign(eventMetadata,{"maxSupply": event.target.value}));
-        console.log("Metadata now is: ", eventMetadata);
+        setEventData(Object.assign(eventData,{"maxSupply": event.target.value}));
+        console.log("Metadata now is: ", eventData);
         updateImage()
     }
 
     const changeEventResalePercHandler = (event: any) => {
-        setEventData(Object.assign(eventMetadata,{"percentageOnResale": event.target.value}));
+        setEventData(Object.assign(eventData,{"percentageOnResale": event.target.value}));
         updateImage()
     }
 
@@ -128,7 +126,7 @@ const TicketCanvas = (props:any) => {
             <Row>
                 <Col>
                     <canvas className="align-self-center" ref={canvasRef} {...props}/>
-                    <img ref={imageRef} src={props.uri} hidden={true} />
+                    <img ref={imageRef} src={BASE_IMAGE_URL} hidden={true} />
                     <img ref={badgeRef} src={uploadedBadgeUrl} hidden={true} />
                 </Col>
 
@@ -163,22 +161,17 @@ const TicketCanvas = (props:any) => {
                         <DatePicker selected={expirationDateTimestamp} onChange={(date: any) => setExpirationDateTimestamp(date)} />
                     </Form>
                     <Row className="mt-3">
-                        <Col>
-                            <Button disabled={uploadedBadgeUrl==null} onClick={updateImage}>Preview</Button>
-                        </Col>
-                        <Col>
-                            <Button onClick={saveTicket}>Save Changes</Button>
-                        </Col>
+                        <Button onClick={()=> mintNFTicket(props.contract, props.account, eventData, eventMetadata, expirationDateTimestamp,currentBadgeFile)}>Mint tickets</Button>
                     </Row>
                 </Col>
                 </Row>
             <div>
-                <Button onClick={()=> mintNFTicket(props.contract, props.account, eventData, eventMetadata, expirationDateTimestamp,currentBadgeFile)}>Mint tickets</Button>
+                <Button onClick={()=> getInterval(props.contract)}>Interval</Button>
+                <Button onClick={()=> getUpdatesCounter(props.contract)}>Updates counter</Button>
+                <Button onClick={()=> getkeeperVerificationCounter(props.contract)}>Keeper verifications</Button>
             </div>
         </Container>)
 }
-
-
 
 
 export default TicketCanvas;
