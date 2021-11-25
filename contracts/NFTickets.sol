@@ -159,11 +159,17 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         for (uint256 i = 0; i < _currentEventId; i++) {
             if (
                 nfTickets[i].expirationDateTimestamp < block.timestamp * 1000 &&
-                nfTickets[i].expired != false
+                nfTickets[i].expired != true
             ) {
                 nfTickets[i].expired = true;
+                CustomTicket[] memory ticketsArray = ownedTickets[nfTickets[i].owner];
+                for (uint256 a = 0; a< ticketsArray.length; a++){
+                    if(keccak256(abi.encodePacked(ticketsArray[a].metadataURI)) == keccak256(abi.encodePacked(nfTickets[i].metadataURI))){
+                        ownedTickets[nfTickets[i].owner][a] = nfTickets[i];
+                        updatesCounter = updatesCounter + 1;
+                    }
+                }
                 _updatedTickets.push(i);
-                updatesCounter = updatesCounter + 1;
             }
         }
         // Emit event with updated Tickets
@@ -180,6 +186,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     }
 
     function performUpkeep(bytes calldata performData) external override {
+        lastTimeStamp = block.timestamp;
         keeperVerificationCounter = keeperVerificationCounter + 1;
         _updateTickets();
     }
