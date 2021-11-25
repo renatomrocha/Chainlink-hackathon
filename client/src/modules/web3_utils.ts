@@ -3,7 +3,8 @@ import Web3 from "web3";
 import detectEthereumProvider from "@metamask/detect-provider";
 declare const window :any;
 
-const MUMBAI_CONTRACT_ADDRESS = "0x8730a46418a881128890bD1668af37e1a5ACFfc7";
+const MUMBAI_CONTRACT_ADDRESS = "0xaA166E029f1fD19d2053abccdBEe1cE6141f469c";
+
 
 const MUMBAI_CONTRACT_ADDRESS_REMIX = "0x43f96e3d0B205D971C83F55481739F7807385fFE"
 
