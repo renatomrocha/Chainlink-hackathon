@@ -30,6 +30,13 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
 
     mapping(uint256 => CustomTicket) public nfTickets;
 
+    struct ResaleTicket {
+        uint256 num;
+        uint256 resalePrice;
+    }
+
+    mapping(uint256 => mapping(address => ResaleTicket)) public resale;
+
     constructor(uint256 updateInterval)
         ERC1155("https://localhost/NFTickets/{id}.json")
     {
@@ -120,8 +127,8 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
             "Not enough funds sent to buy the tickets"
         );
 
-        // Don't we need to transfer the eth to the owner's account?
         revenue[_owner] += msg.value;
+        //TODO: Update the ownedTickets variable
         _safeTransferFrom(_owner, msg.sender, _tokenId, _numberOfTickets, "");
     }
 
@@ -142,6 +149,58 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         require(sent, "Failed to send ether");
     }
 
+    /// @dev Allows one to put up tickets on resale
+    /// @param _tokenId The ID of the tiket to be put up for sale
+    /// @param _numTickets The number of tickets to be up for sale
+    /// @param _resalePrice The resale price of tickets to be up for sale
+    function putOnResale(uint256 _tokenId, uint256 _numTickets, uint256 _resalePrice) public {
+        CustomTicket memory _ticket = nfTickets[_tokenId];
+        require(msg.sender != _ticket.owner, "Owner cannot re-sell tickets");
+        require(_resalePrice <= _ticket.tokenSalePrice, "You cannot sell at a higher price than original");
+
+        uint256 _ownedTickets = balanceOf(msg.sender, _tokenId);
+        require(_numTickets <= _ownedTickets, "You don't have enough tickets");
+
+        ResaleTicket memory _resaleTicket;
+
+        _resaleTicket.num = _numTickets;
+        _resaleTicket.resalePrice = _resalePrice;
+
+        resale[_tokenId][msg.sender] = _resaleTicket;
+
+    }
+
+    function getResaleTickets(uint256 _tokenId, address _seller) public view returns (ResaleTicket memory) {
+        return resale[_tokenId][_seller];
+    }
+
+
+    function buyFromReseller(
+        uint _tokenId, 
+        address _seller, 
+        uint256 _numTickets) public payable {
+
+        ResaleTicket memory _resaleTicket = resale[_tokenId][_seller];
+
+        require(_numTickets <= _resaleTicket.num, "Owner doesn't have enough tickets");
+
+        uint256 _resaleFeePercent = nfTickets[_tokenId].percentageOnResale;
+        address _owner = nfTickets[_tokenId].owner;
+        uint256 _ticketPrice = _numTickets * _resaleTicket.resalePrice;
+        uint256 _totalPrice = _ticketPrice * (1 + _resaleFeePercent/100);
+        require(msg.value >=  _totalPrice, "Not enough value sent");
+
+        revenue[_seller] += _ticketPrice;
+        revenue[_owner] += _ticketPrice * _resaleFeePercent/100;
+
+        resale[_tokenId][_seller].num -= _numTickets;
+        //TODO: Update the ownedTickets variable
+        _safeTransferFrom(_seller, msg.sender, _tokenId, _numTickets, "");
+
+    }
+
+
+
     // -------- Integrate token URI (No longer required)
 
     //    function setTokenUri(uint256 tokenId, string memory _tokenURI) public {
@@ -160,6 +219,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
             if (
                 nfTickets[i].expirationDateTimestamp < block.timestamp * 1000 &&
                 nfTickets[i].expired != true
+
             ) {
                 nfTickets[i].expired = true;
                 CustomTicket[] memory ticketsArray = ownedTickets[nfTickets[i].owner];

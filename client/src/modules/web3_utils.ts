@@ -5,6 +5,7 @@ declare const window :any;
 
 const MUMBAI_CONTRACT_ADDRESS = "0xaA166E029f1fD19d2053abccdBEe1cE6141f469c";
 
+
 const MUMBAI_CONTRACT_ADDRESS_REMIX = "0x43f96e3d0B205D971C83F55481739F7807385fFE"
 
 export const initContract = (web3: any, contractSetter: Function, contractDefinition: any) => {
