@@ -158,7 +158,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         //TODO solve this issue to store which tickets are being updated
         for (uint256 i = 0; i < _currentEventId; i++) {
             if (
-                nfTickets[i].expirationDateTimestamp < block.timestamp &&
+                nfTickets[i].expirationDateTimestamp < block.timestamp * 1000 &&
                 nfTickets[i].expired != false
             ) {
                 nfTickets[i].expired = true;
@@ -171,6 +171,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         _updatedTickets = new uint256[](0);
     }
 
+    // TODO make heavy computation on checkUpKeep side, return tickets to update in performData
     function checkUpkeep(
         bytes calldata /* checkData */
     ) external override returns (bool upkeepNeeded, bytes memory performData) {

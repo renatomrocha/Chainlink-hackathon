@@ -165,11 +165,11 @@ const TicketCanvas = (props:any) => {
                     </Row>
                 </Col>
                 </Row>
-            {/*<div>*/}
-            {/*    <Button onClick={()=> getInterval(props.contract)}>Interval</Button>*/}
-            {/*    <Button onClick={()=> getUpdatesCounter(props.contract)}>Updates counter</Button>*/}
-            {/*    <Button onClick={()=> getkeeperVerificationCounter(props.contract)}>Keeper verifications</Button>*/}
-            {/*</div>*/}
+            <div>
+                <Button onClick={()=> getInterval(props.contract)}>Interval</Button>
+                <Button onClick={()=> getUpdatesCounter(props.contract)}>Updates counter</Button>
+                <Button onClick={()=> getkeeperVerificationCounter(props.contract)}>Keeper verifications</Button>
+            </div>
         </Container>)
 }
 

@@ -20,9 +20,6 @@ export const mintNFTicket = async (nftContract: any, account: string, data: any,
 }
 
 
-
-
-
 export const subscribeTicketsUpdated = (nftContract: any) => {
     nftContract.events.TicketsUpdated(null, (data: any)=> {
         console.log("Tickets updated");
