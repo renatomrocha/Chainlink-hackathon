@@ -20,13 +20,16 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         uint256 maxSupply;
         uint256 percentageOnResale;
         uint256 expirationDateTimestamp;
+        uint256 ticketId;
         string metadataURI; // IPFS URI that contains event name, description, Ticket type, image url.
         bool expired;
     }
 
     mapping(address => uint256) private revenue;
 
+
     mapping(address => CustomTicket[]) public ownedTickets;
+
 
     mapping(uint256 => CustomTicket) public nfTickets;
 
@@ -56,6 +59,22 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         returns (CustomTicket[] memory)
     {
         return ownedTickets[_account];
+    }
+
+
+    function updateOwnedTickets(address _account, uint256 _newTicketId)
+    private {
+        CustomTicket[] memory storedTickets = ownedTickets[_account];
+        bool idAlreadyExists = false;
+        for (uint256 i = 0; i < storedTickets.length; i++){
+            if(storedTickets[i].ticketId == _newTicketId) {
+                idAlreadyExists = true;
+                break;
+            }
+        }
+        if(idAlreadyExists!=true){
+            ownedTickets[_account].push(nfTickets[_newTicketId]);
+        }
     }
 
     /// @dev Function mints a bunch of tokens at a time
@@ -95,6 +114,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         _newTicket.expired = false;
         _newTicket.percentageOnResale = _percentageOnResale;
         _newTicket.expirationDateTimestamp = _expirationDateTimestamp;
+        _newTicket.ticketId = _currentEventId;
         nfTickets[_currentEventId] = _newTicket;
 
         //Here we can try to use VRF and _mint a few "special tokens"??
@@ -128,7 +148,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         );
 
         revenue[_owner] += msg.value;
-        //TODO: Update the ownedTickets variable
+        updateOwnedTickets(msg.sender,_tokenId);
         _safeTransferFrom(_owner, msg.sender, _tokenId, _numberOfTickets, "");
     }
 
@@ -167,8 +187,9 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         _resaleTicket.resalePrice = _resalePrice;
 
         resale[_tokenId][msg.sender] = _resaleTicket;
-
     }
+
+
 
     function getResaleTickets(uint256 _tokenId, address _seller) public view returns (ResaleTicket memory) {
         return resale[_tokenId][_seller];
@@ -199,17 +220,21 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
 
     }
 
+    function accessEventFromTicket(uint256 _ticketId) public view returns(uint256){
+        require(nfTickets[_ticketId].expired != true, "This ticket is expired!");
+        uint256 entrances = balanceOf(msg.sender, _ticketId);
+        require(entrances>0, "You don't have any ticket to allow an entrance to this event");
+        return entrances;
+    }
 
 
-    // -------- Integrate token URI (No longer required)
-
-    //    function setTokenUri(uint256 tokenId, string memory _tokenURI) public {
-    //        require(
-    //            msg.sender == nfTickets[tokenId].owner,
-    //            "Transfer caller is not owner nor approved"
-    //        );
-    //        nfTickets[tokenId].metadataURI = _tokenURI;
-    //    }
+    function getAllEvents() public view returns(CustomTicket[] memory) {
+        CustomTicket[] memory events = new CustomTicket[](_currentEventId);
+        for (uint256 i = 0; i<_currentEventId;i++) {
+            events[i] = nfTickets[i];
+        }
+        return events;
+    }
 
     // -------- Keepers integration ------ Work in progress ... (TODO: Migrate ticket processing functions to own library)
 

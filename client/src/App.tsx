@@ -5,6 +5,8 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import MyTickets from "./components/MyTickets";
 import Home from "./components/Home";
 import TicketCanvas from "./components/TicketCanvas";
+import Events from "./components/Events";
+import BuyTickets from "./components/BuyTickets";
 
 
 function App() {
@@ -25,9 +27,11 @@ function App() {
             {contract && <p>Connected to contract</p>}
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="create-tickets" element={<TicketCanvas account={account} network={network} contract={contract}
+                <Route path="mint-tickets" element={<TicketCanvas account={account} network={network} contract={contract}
                                                                     uri="https://ipfs.io/ipfs/QmYEowFCRGFsuzhhwMdijZ1sqUfZd28gcJ7bx3Vydgso9x"/>} />
+                <Route path="/events" element={<Events account={account} network={network} contract={contract}/>}/>
                 <Route path="my-tickets" element={<MyTickets account={account} network={network} contract={contract}/>} />
+                <Route path="/buy-ticket/:ticketId" element={<BuyTickets account={account} network={network} contract={contract}/>} />
             </Routes>
         </BrowserRouter>
     </div>

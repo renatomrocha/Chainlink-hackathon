@@ -3,7 +3,7 @@ import Web3 from "web3";
 import detectEthereumProvider from "@metamask/detect-provider";
 declare const window :any;
 
-const MUMBAI_CONTRACT_ADDRESS = "0xaA166E029f1fD19d2053abccdBEe1cE6141f469c";
+const MUMBAI_CONTRACT_ADDRESS = "0x867eb7E4939a5fB78be6A1743853B57523809246";
 
 
 const MUMBAI_CONTRACT_ADDRESS_REMIX = "0x43f96e3d0B205D971C83F55481739F7807385fFE"
@@ -67,6 +67,17 @@ export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunctio
     web3.currentProvider.on("chainChanged", async (chain:any) => {
         chainUpdateFunction(chain);
     })
+}
+
+
+
+export const processSmartContractResponseTuple = (tuple: any[]) => {
+    let key : any;
+    let ticketObj: any = new Object();
+    for (key in tuple) {
+        ticketObj[key.toString()] = tuple[key];
+    }
+    return ticketObj;
 }
 
 

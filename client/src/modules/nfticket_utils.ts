@@ -49,6 +49,11 @@ export const getOwnedTickets = async (nftContract: any, account: string) => {
     return ownedTickets;
 }
 
+export const getAllEvents = async (nftContract: any, account: string) => {
+    const events = await nftContract.methods.getAllEvents().call();
+    return events;
+}
+
 
 export const numTicketsOwned = (nftContract: any, index: number, account: string) => {
     nftContract.methods.numTicketsOwned(index).send({from: account})
@@ -57,3 +62,17 @@ export const numTicketsOwned = (nftContract: any, index: number, account: string
         })
 }
 
+
+export const balanceOf = async (nftContract: any, account: any, ticketId: any) => {
+    const balance = await nftContract.methods.balanceOf(account, ticketId).call();
+    return balance;
+}
+
+export const getTicket = async (nftContract: any, ticketId: any) => {
+    const ticket = await nftContract.methods.nfTickets(ticketId).call();
+    return ticket;
+}
+
+export const buyTickets = async (nftContract: any, ticketId: any, amount: number, account: any, amountToPay: number) => {
+    await nftContract.methods.buyFromOwner(ticketId, amount).send({from: account, value: amountToPay});
+}
