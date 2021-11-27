@@ -7,7 +7,8 @@ from web3 import Web3
 def deploy_nfticket_factory():
     account = get_account()
 
-    nfticket_factory = NFTickets.deploy(10, {"from": account}, publish_source=config["networks"][network.show_active()]["verify"])
+    # print("Deploying with price feed: ", config["oracle_price_feeds"]["mumbai_testnet"]["matic_usd"])
+    nfticket_factory = NFTickets.deploy(10,config["oracle_price_feeds"]["mumbai_testnet"]["matic_usd"] , {"from": account}, publish_source=config["networks"][network.show_active()]["verify"])
     print(f"Contract deployed to {nfticket_factory.address}")
     return nfticket_factory
 

@@ -13,10 +13,8 @@ export const mintNFTicket = async (nftContract: any, account: string, data: any,
     const metadata_url = await uploadToIPFS(metadataDoc);
     console.log("Metadata url: ", metadata_url);
     console.log("Making request with account: ", account);
-    nftContract.methods.createEventTickets(data.unitPrice,data.maxSupply,data.percentageOnResale, expirationDateTimestamp.getTime(),metadata_url).send({from: account})
-        .then(()=> {
-            console.log("Tickets created")
-        })
+    return await nftContract.methods.createEventTickets(data.unitPrice,data.maxSupply,data.percentageOnResale, expirationDateTimestamp.getTime(),metadata_url).send({from: account})
+
 }
 
 
@@ -74,5 +72,17 @@ export const getTicket = async (nftContract: any, ticketId: any) => {
 }
 
 export const buyTickets = async (nftContract: any, ticketId: any, amount: number, account: any, amountToPay: number) => {
-    await nftContract.methods.buyFromOwner(ticketId, amount).send({from: account, value: amountToPay});
+    return await nftContract.methods.buyFromOwner(ticketId, amount).send({from: account, value: amountToPay});
+}
+
+export const getMaticPrice = async (nftContract: any) => {
+    return await nftContract.methods.getMaticPrice().call();
+}
+
+export const getRevenue = async (nftContract: any, account: any) => {
+    return await nftContract.methods.getRevenue(account).call();
+}
+
+export const withdrawFunds = async (nftContract: any, account: any) => {
+    return await nftContract.methods.withdrawProceeds().send({from:account});
 }

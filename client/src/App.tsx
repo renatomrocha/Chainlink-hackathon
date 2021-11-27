@@ -7,7 +7,9 @@ import Home from "./components/Home";
 import TicketCanvas from "./components/TicketCanvas";
 import Events from "./components/Events";
 import BuyTickets from "./components/BuyTickets";
-
+import * as NFTicketContract from "./artifacts/contracts/NFTickets.json";
+import {MUMBAI_CONTRACT_ADDRESS} from "./modules/web3_utils";
+import MyFunds from "./components/MyFunds";
 
 function App() {
 
@@ -15,22 +17,43 @@ function App() {
     const [network, setNetwork] = useState<any>(null)
     const [account, setAccount] = useState<any>(null)
     const [contract, setContract] = useState<any>(null);
+    const [isNetworkInvalid, setIsNetworkInvalid] = useState<boolean>(false);
 
     const web3States = [web3, account, network];
-    const maskUpdateFunctions = [setWeb3, setAccount, setNetwork, setContract];
+    const maskUpdateFunctions = [setWeb3, setAccount, setNetwork];
+
+
+
+    useEffect(()=> {
+        console.log("Network is: ", network);
+        if(network!=80001) {
+            setIsNetworkInvalid(true);
+        } else {
+            setIsNetworkInvalid(false);
+            const abi = (NFTicketContract as any).default.abi;
+            const contractAddress = MUMBAI_CONTRACT_ADDRESS
+            const contract: any = new web3.eth.Contract(abi, contractAddress)
+            setContract(contract);
+        }
+    }, [network, account])
+
 
   return (
-    <div className="container-fluid">
+    <div  className="container-fluid">
         <BrowserRouter>
+            <div style={{marginBottom:"20px"}}>
             <NFTicketsNavbar maskUpdateFunctions={maskUpdateFunctions} web3States={web3States}/>
-            {network && <div><p>Connected to {network}</p><p>Your address is: {account}</p></div>}
-            {contract && <p>Connected to contract</p>}
+            </div>
+                {/*{network && <div><p>Connected to {network}</p><p>Your address is: {account}</p></div>}*/}
+            {/*{contract && <p>Connected to contract</p>}*/}
+            {(isNetworkInvalid && account!=null) && <h3 style={{color:"red"}}>Please connect to Polygon's Mumbai Testnet</h3>}
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route  path="/" element={<Home account={account} network={network} contract={contract}/>} />
                 <Route path="mint-tickets" element={<TicketCanvas account={account} network={network} contract={contract}
                                                                     uri="https://ipfs.io/ipfs/QmYEowFCRGFsuzhhwMdijZ1sqUfZd28gcJ7bx3Vydgso9x"/>} />
                 <Route path="/events" element={<Events account={account} network={network} contract={contract}/>}/>
                 <Route path="my-tickets" element={<MyTickets account={account} network={network} contract={contract}/>} />
+                {/*<Route path="my-funds" element={<MyFunds account={account} network={network} contract={contract}/>} />*/}
                 <Route path="/buy-ticket/:ticketId" element={<BuyTickets account={account} network={network} contract={contract}/>} />
             </Routes>
         </BrowserRouter>

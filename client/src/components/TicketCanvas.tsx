@@ -4,8 +4,11 @@ import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import {getInterval, getkeeperVerificationCounter, getUpdatesCounter, mintNFTicket} from "../modules/nfticket_utils";
 // @ts-ignore
 import DatePicker from "react-datepicker";
-
+import {ColorPalette} from "../styles/color_palette";
 import "react-datepicker/dist/react-datepicker.css";
+import { SpinnerDiamond, SpinnerInfinity, SpinnerDotted } from 'spinners-react';
+import NFTicketSpinner from "./NFTicketSpinner";
+
 const TicketCanvas = (props:any) => {
 
     console.log("Received props: ", props);
@@ -21,13 +24,18 @@ const TicketCanvas = (props:any) => {
     const [eventMetadata, setEventMetadata] = useState<any>({});
     const [eventData, setEventData] = useState<any>({});
     const [expirationDateTimestamp, setExpirationDateTimestamp] = useState(new Date());
+    const [minting, setMinting] = useState<boolean>(false);
+
+    const [mintingError, setMintingError] = useState<boolean>(false);
+    const [mintingSuccessful, setMintingSuccessful] = useState<boolean>(false);
 
 
 
     const styles = {
         border: '2px solid rgba(0, 0, 0, 0.5)',
         borderRadius:'10px',
-        padding:'20px'
+        padding:'20px',
+        marginBottom:'50px'
     };
 
     const drawTicket = (canvas: any, image:any, badge: any) => {
@@ -119,6 +127,28 @@ const TicketCanvas = (props:any) => {
         drawTicket(canvas, image, badger);
     }, [])
 
+    const _mintNFTicket = () => {
+        setMinting(true);
+        mintNFTicket(props.contract, props.account, eventData, eventMetadata, expirationDateTimestamp,currentBadgeFile)
+            .then(()=> {
+                setMinting(false);
+                setMintingSuccessful(true);
+                setTimeout(()=>{
+                    setMintingSuccessful(false);
+
+                }, 4000)
+            })
+            .catch(()=>{
+                setMinting(false);
+                setMintingError(true);
+                setTimeout(()=>{
+                    setMintingError(false);
+                }, 4000)
+            })
+
+    }
+
+
 
     return (
         <Container fluid className="justify-content-md-center" style={styles}>
@@ -161,15 +191,22 @@ const TicketCanvas = (props:any) => {
                         <DatePicker selected={expirationDateTimestamp} onChange={(date: any) => setExpirationDateTimestamp(date)} />
                     </Form>
                     <Row className="mt-3">
-                        <Button onClick={()=> mintNFTicket(props.contract, props.account, eventData, eventMetadata, expirationDateTimestamp,currentBadgeFile)}>Mint tickets</Button>
+                        {!minting && !(mintingError || mintingSuccessful) && <Button style={{backgroundColor: ColorPalette.secondaryColor, borderColor: ColorPalette.secondaryColor}} onClick={_mintNFTicket}>Mint tickets</Button>}
+
+                        {mintingError && <span style={{color: ColorPalette.warning, fontSize:"1.3em"}}>Something went wrong while minting your tickets</span>}
+                        {mintingSuccessful && <span style={{color: ColorPalette.success , fontSize:"1.3em"}}>NFTickets successfully minted! </span>}
+
+                        {minting && <NFTicketSpinner message="Minting your NFTickets..."/>}
+
+
                     </Row>
                 </Col>
                 </Row>
-            <div>
-                <Button onClick={()=> getInterval(props.contract)}>Interval</Button>
-                <Button onClick={()=> getUpdatesCounter(props.contract)}>Updates counter</Button>
-                <Button onClick={()=> getkeeperVerificationCounter(props.contract)}>Keeper verifications</Button>
-            </div>
+            {/*<div>*/}
+            {/*    <Button onClick={()=> getInterval(props.contract)}>Interval</Button>*/}
+            {/*    <Button onClick={()=> getUpdatesCounter(props.contract)}>Updates counter</Button>*/}
+            {/*    <Button onClick={()=> getkeeperVerificationCounter(props.contract)}>Keeper verifications</Button>*/}
+            {/*</div>*/}
         </Container>)
 }
 
