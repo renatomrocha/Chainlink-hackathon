@@ -32,8 +32,8 @@ export default function EventDisplay(props: any) {
 
     }
 
-    return (<div className="mt-2" style={{border: '2px solid rgba(0, 0, 0, 0.5)',
-        borderRadius:'10px' ,backgroundColor: ColorPalette.mainColor}}>
+    return (<div className="mt-2"style={{border: '2px solid rgba(0, 0, 0, 0.5)', margin:"20px",
+        borderRadius:'10px', backgroundColor: ColorPalette.mainColor, width:"80%"}}>
         <div style={{padding:"10px"}}>
             <Row>
                 <Col>

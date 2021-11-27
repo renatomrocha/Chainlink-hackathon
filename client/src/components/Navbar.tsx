@@ -42,7 +42,8 @@ export default function NFTicketsNavbar(props: any) {
                             {props.web3States[1] && <span>Account: {props.web3States[1]}</span>}
                         </div>
                     </div>
-                    <Button style={{backgroundColor: ColorPalette.secondaryColor, borderColor: ColorPalette.secondaryColor}} onClick={connectToMetamask}>Connect your wallet</Button>
+                    <Button disabled={props.web3States[1]} style={{backgroundColor: ColorPalette.secondaryColor, borderColor: ColorPalette.secondaryColor}} onClick={connectToMetamask}>Connect your wallet</Button>
+                    
 
                 </Navbar.Collapse>
             </Container>

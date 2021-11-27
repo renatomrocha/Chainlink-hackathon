@@ -28,19 +28,6 @@ export default function TicketDisplay(props: any) {
 
     }
 
-    const getBalance = async () => {
-        const _balance = await balanceOf(props.contract, props.account, props.ticket.ticketId);
-        setBalance(_balance)
-    }
-
-
-
-
-
-
-
-
-
     useEffect(()=> {
         const _balance = getBalance().then(()=>{})
         console.log("Balance is: ", balance);
@@ -49,10 +36,15 @@ export default function TicketDisplay(props: any) {
         console.log("Own? ", props.account == props.ticket.owner);
     },[])
 
+    const infoStyle = {
+        fontSize:"1.2em",
+
+    }
+
     // getBalance().then((b)=>console.log("Received balance: ", b));
 
-    return (<div className="mt-2" style={{border: '2px solid rgba(0, 0, 0, 0.5)',
-                    borderRadius:'10px', backgroundColor: ColorPalette.mainColor}}>
+    return (<div className="mt-2" style={{border: '2px solid rgba(0, 0, 0, 0.5)', margin:"20px",
+                    borderRadius:'10px', backgroundColor: ColorPalette.mainColor, width:"80%"}}>
         <div style={{padding:"10px"}}>
             <Row>
                 <Col>
@@ -62,11 +54,11 @@ export default function TicketDisplay(props: any) {
                 </Col>
                 <Col>
 
-                    <p>Ticket Id: {props.ticket.ticketId}</p>
-                    <p>Maximum supply: {props.ticket.maxSupply}</p>
-                    <p>Price: {props.ticket.tokenSalePrice} $</p>
-                    <p>Expiration date: {formatedDate}</p>
-                    <p>Balance: {balance}</p>
+                    <p style={infoStyle}>Ticket Id: {props.ticket.ticketId}</p>
+                    <p style={infoStyle}>Maximum supply: {props.ticket.maxSupply}</p>
+                    <p style={infoStyle}>Price: {props.ticket.tokenSalePrice} $</p>
+                    <p style={infoStyle}>Expiration date: {formatedDate}</p>
+                    <p style={infoStyle}>Balance: {balance}</p>
                     <p><span>State: </span>{props.ticket.expired?<span>Expired</span>:<span>Valid</span>}</p>
                     {props.ticket.owner.toUpperCase()==props.account.toUpperCase()?<p>Minted by me!</p>:<p>Usable</p>}
 
