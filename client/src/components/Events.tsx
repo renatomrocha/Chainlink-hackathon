@@ -5,14 +5,20 @@ import {IPFS_NODE_URL} from "../modules/ipfs_utils";
 import TicketDisplay from "./TicketDisplay";
 import axios from "axios";
 import EventDisplay from "./EventDisplay";
+import {ColorPalette} from "../styles/color_palette";
+import NFTicketSpinner from "./NFTicketSpinner";
+
 
 const Events = (props: any) => {
 
     const [events, setEvents] = useState<any>([]);
-
+    const [loading, setLoading] = useState<boolean>(false);
     useEffect(()=> {
+        setLoading(true);
         loadEvents()
             .then((data)=> {
+                setLoading(false);
+
                 console.log("Got tickets: ", data);
             })
     },[])
@@ -57,9 +63,11 @@ const Events = (props: any) => {
     return (<div>
         <h2>Events</h2>
     {/*<Button onClick={loadEvents}>Load Tickets</Button>*/}
+        {loading && <NFTicketSpinner message="Loading existing events..." spinnerSize="100"></NFTicketSpinner>}
     {events != null && events.map((ticket:any, idx: number) => {
         console.log("Ticket is: ", ticket);
-        return <EventDisplay key={idx} ticket={ticket} account={props.account} contract={props.contract}/>
+        return <EventDisplay  key={idx} ticket={ticket} account={props.account} contract={props.contract}/>
+
     })}
     </div>)
 }

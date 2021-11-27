@@ -9,7 +9,6 @@ import {
 import React from "react";
 import {Button} from "react-bootstrap";
 
-
 const TicketGenerator = (props: any) => {
 
     console.log("Ticket Generator received props: ", props);
@@ -21,16 +20,16 @@ const TicketGenerator = (props: any) => {
         });
     }
 
-    return (<div>
+    return (<div className="mt-3">
                 <div>
                     <TicketCanvas props={{uri:"http://bafybeigblofriz5b4zg4xil45t36snirvpzvja63r2yxybwm5ncuphane4.ipfs.localhost:8080/"}}></TicketCanvas>
                 </div>
-                <div>
-                    <Button onClick={()=> getInterval(props.contract)}>Interval</Button>
-                    <Button onClick={()=> getUpdatesCounter(props.contract)}>Updates counter</Button>
-                    <Button onClick={()=> getkeeperVerificationCounter(props.contract)}>Keeper verifications</Button>
-                    <Button onClick={()=> getOwnedTickets(props.contract, props.account)}>Owned Ids</Button>
-                </div>
+                {/*<div>*/}
+                {/*    <Button onClick={()=> getInterval(props.contract)}>Interval</Button>*/}
+                {/*    <Button onClick={()=> getUpdatesCounter(props.contract)}>Updates counter</Button>*/}
+                {/*    <Button onClick={()=> getkeeperVerificationCounter(props.contract)}>Keeper verifications</Button>*/}
+                {/*    <Button onClick={()=> getOwnedTickets(props.contract, props.account)}>Owned Ids</Button>*/}
+                {/*</div>*/}
             </div>
     )
 }

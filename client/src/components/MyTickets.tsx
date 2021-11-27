@@ -4,14 +4,21 @@ import {Button} from "react-bootstrap";
 import {IPFS_NODE_URL} from "../modules/ipfs_utils";
 import TicketDisplay from "./TicketDisplay";
 import axios from "axios";
+import NFTicketSpinner from "./NFTicketSpinner";
 
 const MyTickets = (props: any) => {
 
         const [myTickets, setMyTickets] = useState<any>([]);
+        const [loading, setLoading] = useState<boolean>(false);
 
-        useEffect(()=> {
+
+
+    useEffect(()=> {
+        setLoading(true);
+
             loadTickets()
                 .then((data)=> {
+                    setLoading(false);
                     console.log("Got tickets: ", data);
                 })
         },[])
@@ -55,8 +62,11 @@ const MyTickets = (props: any) => {
     }
 
     return (<div>
-        <h2>My Tickets</h2>
+        <h2 style={{marginBottom:"50px"}}>My Tickets</h2>
         {/*<Button onClick={loadTickets}>Load Tickets</Button>*/}
+        {loading && <NFTicketSpinner message="Loading ticket collection..." spinnerSize="100"></NFTicketSpinner>}
+
+
         {myTickets != null && myTickets.map((ticket:any, idx: number) => {
             console.log("Ticket is: ", ticket);
                 return <TicketDisplay  key={idx} ticket={ticket} account={props.account} contract={props.contract}/>

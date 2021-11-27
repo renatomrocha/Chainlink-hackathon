@@ -3,16 +3,22 @@ pragma solidity ^0.8.0;
 
 import "OpenZeppelin/openzeppelin-contracts@4.3.0/contracts/token/ERC1155/ERC1155.sol";
 import "smartcontractkit/chainlink-brownie-contracts@0.2.2/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
+import "smartcontractkit/chainlink-brownie-contracts@0.2.2//contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
 
 contract NFTickets is ERC1155, KeeperCompatibleInterface {
-    uint256 private _currentEventId = 0;
 
+    uint256 private _currentEventId = 0;
     // Keeper variables
     uint256 public immutable interval;
     uint256 public lastTimeStamp;
     uint256 public keeperVerificationCounter = 0;
     uint256 public updatesCounter = 0;
     uint256[] private _updatedTickets;
+
+    // Price feed aggregator
+    AggregatorV3Interface internal priceFeed;
+
 
     struct CustomTicket {
         address owner;
@@ -40,17 +46,32 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
 
     mapping(uint256 => mapping(address => ResaleTicket)) public resale;
 
-    constructor(uint256 updateInterval)
+    constructor(uint256 updateInterval, address AggregatorAddress)
         ERC1155("https://localhost/NFTickets/{id}.json")
     {
         interval = updateInterval;
         lastTimeStamp = block.timestamp;
+        priceFeed = AggregatorV3Interface(AggregatorAddress);
     }
 
     event TicketCreation(uint256 _tokenId, uint256 _unitPrice);
 
     // Event for tickets updated
     event TicketsUpdated(uint256[] _tokenIds);
+
+
+    //Oracle method
+    function getMaticPrice() public view returns (uint256) {
+        (
+            uint80 roundID,
+            int price,
+            uint startedAt,
+            uint timeStamp,
+            uint80 answeredInRound
+        ) = priceFeed.latestRoundData();
+        return uint256(price);
+    }
+
 
     // Getter
     function getOwnedTickets(address _account)
@@ -60,6 +81,14 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     {
         return ownedTickets[_account];
     }
+
+    function getRevenue(address _account)
+    public
+    view
+    returns (uint256) {
+        return revenue[_account];
+    }
+
 
 
     function updateOwnedTickets(address _account, uint256 _newTicketId)
@@ -133,6 +162,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         public
         payable
     {
+        require(nfTickets[_tokenId].expired == false, "Tickets already expired!");
         address _owner = nfTickets[_tokenId].owner;
         uint256 _balanceOfOwner = balanceOf(_owner, _tokenId);
         require(
@@ -142,12 +172,16 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
 
         uint256 _unitPrice = nfTickets[_tokenId].tokenSalePrice;
         uint256 _totalRequestedTicketValue = _unitPrice * _numberOfTickets;
+        uint256 _maticPrice = getMaticPrice();
+        uint256 _valueSentInDollars = _maticPrice*msg.value;
         require(
-            msg.value >= _totalRequestedTicketValue,
+            _valueSentInDollars >= _totalRequestedTicketValue,
             "Not enough funds sent to buy the tickets"
         );
 
+        // Adding this for now to enable transactions of value
         revenue[_owner] += msg.value;
+
         updateOwnedTickets(msg.sender,_tokenId);
         _safeTransferFrom(_owner, msg.sender, _tokenId, _numberOfTickets, "");
     }
@@ -168,6 +202,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
 
         require(sent, "Failed to send ether");
     }
+
 
     /// @dev Allows one to put up tickets on resale
     /// @param _tokenId The ID of the tiket to be put up for sale

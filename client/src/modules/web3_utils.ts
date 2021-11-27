@@ -3,7 +3,7 @@ import Web3 from "web3";
 import detectEthereumProvider from "@metamask/detect-provider";
 declare const window :any;
 
-const MUMBAI_CONTRACT_ADDRESS = "0x867eb7E4939a5fB78be6A1743853B57523809246";
+export const MUMBAI_CONTRACT_ADDRESS = "0xaa7d4CF0bA52d83A43FD7C4002b22d06dB6bd226";
 
 
 const MUMBAI_CONTRACT_ADDRESS_REMIX = "0x43f96e3d0B205D971C83F55481739F7807385fFE"
@@ -26,7 +26,7 @@ export const loadBlockchainData = async () => {
     return {"web3":web3,"network":network,"accounts":accounts}
 }
 
-export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunction:any, chainUpdateFunction:any, contractUpdateFunction: any) => {
+export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunction:any, chainUpdateFunction:any) => {
     let provider : any;
     let web3: any;
     let accounts: string[] = [];
@@ -48,10 +48,7 @@ export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunctio
     }
     web3UpdateFunction(web3);
 
-    const abi = (NFTicketContract as any).default.abi;
-    const contractAddress = MUMBAI_CONTRACT_ADDRESS
-    const contract: any = new web3.eth.Contract(abi, contractAddress)
-    contractUpdateFunction(contract);
+
 
 
     // Set Account and change event listener
@@ -79,6 +76,7 @@ export const processSmartContractResponseTuple = (tuple: any[]) => {
     }
     return ticketObj;
 }
+
 
 
 export default NFTicketContract;

@@ -5,10 +5,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
+import {ColorPalette} from "./styles/color_palette";
 
 ReactDOM.render(
   <React.StrictMode>
+      <div>
     <App />
+      </div>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -7,6 +7,10 @@ project_structure:
 autofetch_sources: True
 dotenv: .env
 
+oracle_price_feeds:
+  mumbai_testnet:
+    matic_usd: "0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada"
+
 networks:
 #  networks:
 #    mumbai_moralis:
@@ -35,7 +39,6 @@ networks:
 
   mumbai_moralis_3:
     verify: False
-
 
 
 wallets:
