@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {getOwnedTickets, getTicket, buyTickets, getMaticPrice} from "../modules/nfticket_utils";
+
 import {Button} from "react-bootstrap";
 import {IPFS_NODE_URL} from "../modules/ipfs_utils";
 import TicketDisplay from "./TicketDisplay";
@@ -9,6 +10,7 @@ import {processSmartContractResponseTuple} from "../modules/web3_utils";
 import {ColorPalette} from "../styles/color_palette";
 import NFTicketSpinner from "./NFTicketSpinner";
 
+
 const BuyTickets = (props: any) => {
 
     const {ticketId} = useParams();
@@ -17,6 +19,7 @@ const BuyTickets = (props: any) => {
     const [buying, setBuying] = useState<boolean>(false);
     const [buyingError, setBuyingError] = useState<boolean>(false);
     const [buyingSuccess, setBuyingSuccess] = useState<boolean>(false);
+
     console.log("Is is : ", ticketId);
     console.log("Props: ", props);
 
@@ -29,6 +32,7 @@ const BuyTickets = (props: any) => {
                 setMaticPrice(_maticRealPrice);
                 console.log("Received matic price: ", maticPrice);
             })
+
         loadTicket()
             .then((data)=> {
                 console.log("Got ticket: ", ticket);
@@ -66,6 +70,7 @@ const BuyTickets = (props: any) => {
                 },4000)
                 console.log("Error buying tickets");
             })
+
     }
 
 
@@ -100,6 +105,7 @@ const BuyTickets = (props: any) => {
             {buyingSuccess && <span style={{color:ColorPalette.success, fontSize:"1.3em"}}>NFTickets successfully purchased! </span>}
 
             {buying && <NFTicketSpinner message="Getting your NFTickets ready!"/>}
+
         </div> }
     </div>)
 }

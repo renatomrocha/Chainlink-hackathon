@@ -85,4 +85,5 @@ export const getRevenue = async (nftContract: any, account: any) => {
 
 export const withdrawFunds = async (nftContract: any, account: any) => {
     return await nftContract.methods.withdrawProceeds().send({from:account});
+
 }

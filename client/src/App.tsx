@@ -11,6 +11,7 @@ import * as NFTicketContract from "./artifacts/contracts/NFTickets.json";
 import {MUMBAI_CONTRACT_ADDRESS} from "./modules/web3_utils";
 import MyFunds from "./components/MyFunds";
 
+
 function App() {
 
     const [web3, setWeb3] = useState<any>(null)
@@ -49,11 +50,13 @@ function App() {
             {(isNetworkInvalid && account!=null) && <h3 style={{color:"red"}}>Please connect to Polygon's Mumbai Testnet</h3>}
             <Routes>
                 <Route  path="/" element={<Home account={account} network={network} contract={contract}/>} />
+
                 <Route path="mint-tickets" element={<TicketCanvas account={account} network={network} contract={contract}
                                                                     uri="https://ipfs.io/ipfs/QmYEowFCRGFsuzhhwMdijZ1sqUfZd28gcJ7bx3Vydgso9x"/>} />
                 <Route path="/events" element={<Events account={account} network={network} contract={contract}/>}/>
                 <Route path="my-tickets" element={<MyTickets account={account} network={network} contract={contract}/>} />
                 {/*<Route path="my-funds" element={<MyFunds account={account} network={network} contract={contract}/>} />*/}
+
                 <Route path="/buy-ticket/:ticketId" element={<BuyTickets account={account} network={network} contract={contract}/>} />
             </Routes>
         </BrowserRouter>

@@ -90,6 +90,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     }
 
 
+
     function updateOwnedTickets(address _account, uint256 _newTicketId)
     private {
         CustomTicket[] memory storedTickets = ownedTickets[_account];

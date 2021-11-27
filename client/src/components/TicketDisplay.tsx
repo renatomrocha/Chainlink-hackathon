@@ -5,6 +5,7 @@ import {balanceOf} from "../modules/nfticket_utils";
 import {ColorPalette} from "../styles/color_palette";
 
 
+
 export default function TicketDisplay(props: any) {
 
     const [balance, setBalance] = useState<any>(0);
@@ -24,7 +25,16 @@ export default function TicketDisplay(props: any) {
     const getBalance = async () => {
         const _balance = await balanceOf(props.contract, props.account, props.ticket.ticketId);
         setBalance(_balance)
+
     }
+
+    const getBalance = async () => {
+        const _balance = await balanceOf(props.contract, props.account, props.ticket.ticketId);
+        setBalance(_balance)
+    }
+
+
+
 
 
 
@@ -51,6 +61,7 @@ export default function TicketDisplay(props: any) {
                     <img  style={{marginLeft:"-370px", marginTop:"-170px",zIndex:-1}} src={IPFS_BASE_URL + "/" + props.ticket.metadata.badge_uri} width="80" height="80"/>
                 </Col>
                 <Col>
+
                     <p>Ticket Id: {props.ticket.ticketId}</p>
                     <p>Maximum supply: {props.ticket.maxSupply}</p>
                     <p>Price: {props.ticket.tokenSalePrice} $</p>
@@ -58,6 +69,7 @@ export default function TicketDisplay(props: any) {
                     <p>Balance: {balance}</p>
                     <p><span>State: </span>{props.ticket.expired?<span>Expired</span>:<span>Valid</span>}</p>
                     {props.ticket.owner.toUpperCase()==props.account.toUpperCase()?<p>Minted by me!</p>:<p>Usable</p>}
+
                 </Col>
 
             </Row>

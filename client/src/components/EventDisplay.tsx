@@ -5,6 +5,7 @@ import {balanceOf, getInterval} from "../modules/nfticket_utils";
 import { useNavigate } from 'react-router-dom';
 import {ColorPalette} from "../styles/color_palette";
 
+
 export default function EventDisplay(props: any) {
 
     const [availableForSale, setAvailableForSale] = useState<any>(0);
@@ -50,6 +51,7 @@ export default function EventDisplay(props: any) {
                     <p style={infoStyle}>Maximum supply: {props.ticket.maxSupply}</p>
                     <p style={infoStyle}><span>State: </span>{props.ticket.expired?<span>Expired</span>:<span>Valid</span>}</p>
                     {!props.ticket.expired && props.ticket.owner.toUpperCase()!=props.account.toUpperCase()?<Button style={{backgroundColor: ColorPalette.secondaryColor, borderColor: ColorPalette.secondaryColor}} onClick={routeChange}>Buy Tickets</Button>:null}
+
 
 
                     {/*<img  style={{marginLeft:"-370px", marginTop:"-170px",zIndex:-1}} src={IPFS_BASE_URL + "/" + props.ticket.metadata.badge_uri} width="80" height="80"/>*/}

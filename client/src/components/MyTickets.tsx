@@ -15,6 +15,7 @@ const MyTickets = (props: any) => {
 
     useEffect(()=> {
         setLoading(true);
+
             loadTickets()
                 .then((data)=> {
                     setLoading(false);
@@ -64,6 +65,7 @@ const MyTickets = (props: any) => {
         <h2 style={{marginBottom:"50px"}}>My Tickets</h2>
         {/*<Button onClick={loadTickets}>Load Tickets</Button>*/}
         {loading && <NFTicketSpinner message="Loading ticket collection..." spinnerSize="100"></NFTicketSpinner>}
+
 
         {myTickets != null && myTickets.map((ticket:any, idx: number) => {
             console.log("Ticket is: ", ticket);

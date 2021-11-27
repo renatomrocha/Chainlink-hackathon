@@ -8,6 +8,7 @@ import EventDisplay from "./EventDisplay";
 import {ColorPalette} from "../styles/color_palette";
 import NFTicketSpinner from "./NFTicketSpinner";
 
+
 const Events = (props: any) => {
 
     const [events, setEvents] = useState<any>([]);
@@ -17,6 +18,7 @@ const Events = (props: any) => {
         loadEvents()
             .then((data)=> {
                 setLoading(false);
+
                 console.log("Got tickets: ", data);
             })
     },[])
@@ -65,6 +67,7 @@ const Events = (props: any) => {
     {events != null && events.map((ticket:any, idx: number) => {
         console.log("Ticket is: ", ticket);
         return <EventDisplay  key={idx} ticket={ticket} account={props.account} contract={props.contract}/>
+
     })}
     </div>)
 }

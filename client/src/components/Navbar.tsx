@@ -30,6 +30,7 @@ export default function NFTicketsNavbar(props: any) {
                                  {props.web3States[1]!=null && <Link to="mint-tickets" className="mx-3 mt-6" style={{color:"white"}}>Mint NFTickets</Link>}
                                  {props.web3States[1]!=null && <Link to="my-funds" className="mx-3 mt-6" style={{color:"white"}}>My Funds</Link>}
 
+
                               </Nav>
                 </Navbar.Collapse>
                 <Navbar.Collapse className="justify-content-end">
@@ -42,6 +43,7 @@ export default function NFTicketsNavbar(props: any) {
                         </div>
                     </div>
                     <Button style={{backgroundColor: ColorPalette.secondaryColor, borderColor: ColorPalette.secondaryColor}} onClick={connectToMetamask}>Connect your wallet</Button>
+
                 </Navbar.Collapse>
             </Container>
         </Navbar>

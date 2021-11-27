@@ -79,7 +79,4 @@ export const processSmartContractResponseTuple = (tuple: any[]) => {
 
 
 
-
-
-
 export default NFTicketContract;
