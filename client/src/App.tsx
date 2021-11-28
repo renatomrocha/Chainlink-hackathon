@@ -41,7 +41,7 @@ function App() {
 
 
   return (
-    <div  className="container-fluid">
+    <div style={{width:"100%"}}>
         <BrowserRouter>
             <div style={{marginBottom:"20px"}}>
             <NFTicketsNavbar maskUpdateFunctions={maskUpdateFunctions} web3States={web3States}/>

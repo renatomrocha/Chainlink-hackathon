@@ -24,7 +24,7 @@ export default function NFTicketsNavbar(props: any) {
     }
 
     return (
-        <Navbar  bg="dark">
+        <Navbar bg="dark">
             <Container>
                 <Navbar.Brand className="justify-content-start" style={{color:"white"}} href="#home">NFTickets</Navbar.Brand>
                 <Navbar.Toggle />
@@ -55,6 +55,7 @@ export default function NFTicketsNavbar(props: any) {
                 </Navbar.Collapse>
             </Container>
         </Navbar>
+
 
 )
 }
