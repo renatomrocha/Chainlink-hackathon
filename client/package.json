@@ -2,7 +2,7 @@
   "name": "chainlink-client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://renatomrocha.github.io/Chainlink-hackathon/",
+  "homepage": "https://renatomrocha.github.io/Chainlink-hackathon/",
   "dependencies": {
     "@metamask/detect-provider": "^1.2.0",
     "@reduxjs/toolkit": "^1.6.2",
