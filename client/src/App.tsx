@@ -10,6 +10,7 @@ import BuyTickets from "./components/BuyTickets";
 import * as NFTicketContract from "./artifacts/contracts/NFTickets.json";
 import {MUMBAI_CONTRACT_ADDRESS} from "./modules/web3_utils";
 import MyFunds from "./components/MyFunds";
+import MarketPlace from "./components/MarketPlace";
 
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
                 {/*<Route path="my-funds" element={<MyFunds account={account} network={network} contract={contract}/>} />*/}
 
                 <Route path="/buy-ticket/:ticketId" element={<BuyTickets account={account} network={network} contract={contract}/>} />
+                <Route path="/marketplace" element={<MarketPlace account={account} contract={contract}/>} />
             </Routes>
         </BrowserRouter>
     </div>

@@ -87,3 +87,35 @@ export const withdrawFunds = async (nftContract: any, account: any) => {
     return await nftContract.methods.withdrawProceeds().send({from:account});
 
 }
+
+export const getResaleTickets = async(contract: any) => {
+    let resaleTickets = [];
+    const eventList = await contract.getPastEvents("TicketOnResale", {
+            fromBlock: 0,
+            toBlock: "latest",
+          }).catch((e: any) => window.alert(e));
+
+
+    for (let i=0; i<eventList.length; i++){
+        const element = eventList[i]["returnValues"];
+
+        // console.log(element);
+
+        const resale = await contract.methods["resale(uint256,address)"](element._tokenId, element._seller).call();
+        // console.log(resale);
+        if (resale.num !== 0) {
+            const obj = {
+                tokenId: element._tokenId,
+                seller: element._seller,
+                numTickets: resale.num,
+                resalePrice: resale.resalePrice
+            }
+            // console.log(obj);
+
+
+            resaleTickets.push(obj);
+        }
+        // console.log(resaleTickets)
+    }
+    return resaleTickets;
+}
