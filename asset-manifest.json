@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/nftickets/static/css/main.bab0b925.chunk.css",
-    "main.js": "/nftickets/static/js/main.ab60a882.chunk.js",
-    "main.js.map": "/nftickets/static/js/main.ab60a882.chunk.js.map",
-    "runtime-main.js": "/nftickets/static/js/runtime-main.5b9a62e9.js",
-    "runtime-main.js.map": "/nftickets/static/js/runtime-main.5b9a62e9.js.map",
-    "static/css/2.92ab3f68.chunk.css": "/nftickets/static/css/2.92ab3f68.chunk.css",
-    "static/js/2.b7968b11.chunk.js": "/nftickets/static/js/2.b7968b11.chunk.js",
-    "static/js/2.b7968b11.chunk.js.map": "/nftickets/static/js/2.b7968b11.chunk.js.map",
-    "static/js/3.b90dfd13.chunk.js": "/nftickets/static/js/3.b90dfd13.chunk.js",
-    "static/js/3.b90dfd13.chunk.js.map": "/nftickets/static/js/3.b90dfd13.chunk.js.map",
-    "index.html": "/nftickets/index.html",
-    "static/css/2.92ab3f68.chunk.css.map": "/nftickets/static/css/2.92ab3f68.chunk.css.map",
-    "static/css/main.bab0b925.chunk.css.map": "/nftickets/static/css/main.bab0b925.chunk.css.map",
-    "static/js/2.b7968b11.chunk.js.LICENSE.txt": "/nftickets/static/js/2.b7968b11.chunk.js.LICENSE.txt"
+    "main.css": "/Chainlink-hackathon/static/css/main.bab0b925.chunk.css",
+    "main.js": "/Chainlink-hackathon/static/js/main.ab60a882.chunk.js",
+    "main.js.map": "/Chainlink-hackathon/static/js/main.ab60a882.chunk.js.map",
+    "runtime-main.js": "/Chainlink-hackathon/static/js/runtime-main.db789438.js",
+    "runtime-main.js.map": "/Chainlink-hackathon/static/js/runtime-main.db789438.js.map",
+    "static/css/2.92ab3f68.chunk.css": "/Chainlink-hackathon/static/css/2.92ab3f68.chunk.css",
+    "static/js/2.b63890c7.chunk.js": "/Chainlink-hackathon/static/js/2.b63890c7.chunk.js",
+    "static/js/2.b63890c7.chunk.js.map": "/Chainlink-hackathon/static/js/2.b63890c7.chunk.js.map",
+    "static/js/3.b90dfd13.chunk.js": "/Chainlink-hackathon/static/js/3.b90dfd13.chunk.js",
+    "static/js/3.b90dfd13.chunk.js.map": "/Chainlink-hackathon/static/js/3.b90dfd13.chunk.js.map",
+    "index.html": "/Chainlink-hackathon/index.html",
+    "static/css/2.92ab3f68.chunk.css.map": "/Chainlink-hackathon/static/css/2.92ab3f68.chunk.css.map",
+    "static/css/main.bab0b925.chunk.css.map": "/Chainlink-hackathon/static/css/main.bab0b925.chunk.css.map",
+    "static/js/2.b63890c7.chunk.js.LICENSE.txt": "/Chainlink-hackathon/static/js/2.b63890c7.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.5b9a62e9.js",
+    "static/js/runtime-main.db789438.js",
     "static/css/2.92ab3f68.chunk.css",
-    "static/js/2.b7968b11.chunk.js",
+    "static/js/2.b63890c7.chunk.js",
     "static/css/main.bab0b925.chunk.css",
     "static/js/main.ab60a882.chunk.js"
   ]
