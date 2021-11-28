@@ -20,7 +20,7 @@ function App() {
     const [contract, setContract] = useState<any>(null);
     const [isNetworkInvalid, setIsNetworkInvalid] = useState<boolean>(false);
 
-    const web3States = [web3, account, network];
+    const web3States = [web3, account, network, isNetworkInvalid];
     const maskUpdateFunctions = [setWeb3, setAccount, setNetwork];
 
 
@@ -29,6 +29,7 @@ function App() {
         console.log("Network is: ", network);
         if(network!=80001) {
             setIsNetworkInvalid(true);
+            // setAccount(null);
         } else {
             setIsNetworkInvalid(false);
             const abi = (NFTicketContract as any).default.abi;
@@ -47,7 +48,6 @@ function App() {
             </div>
                 {/*{network && <div><p>Connected to {network}</p><p>Your address is: {account}</p></div>}*/}
             {/*{contract && <p>Connected to contract</p>}*/}
-            {(isNetworkInvalid && account!=null) && <h3 style={{color:"red"}}>Please connect to Polygon's Mumbai Testnet</h3>}
             <Routes>
                 <Route  path="/" element={<Home account={account} network={network} contract={contract}/>} />
 

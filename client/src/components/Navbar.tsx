@@ -10,6 +10,12 @@ export default function NFTicketsNavbar(props: any) {
 
 
     const [loadingBlockchainData, setLoadingBlockchainData] = useState<boolean>(false);
+    const [mumbaiIsConnected, setMumbaiIsConnected] = useState<boolean>(false);
+    const [isNetworkInvalid, setIsNetworkInvalid] = useState<boolean>(false);
+
+    useEffect(()=> {
+        console.log("Account changed");
+    }, [props.web3States[1]])
 
 
     const connectToMetamask = async()=> {
@@ -25,11 +31,10 @@ export default function NFTicketsNavbar(props: any) {
                 <Navbar.Collapse className="justify-content-end">
                              <Nav className="me-auto">
                                 <Link  to="/" className="mx-3 mt-6" style={{color:"white"}}>Home</Link>
-                                 {props.web3States[1]!=null && <Link to="events" className="mx-3 mt-6" style={{color: "white"}}>Events</Link>}
-                                 {props.web3States[1]!=null && <Link to="my-tickets" className="mx-3 mt-6" style={{color:"white"}}>My Tickets</Link>}
-                                 {props.web3States[1]!=null && <Link to="mint-tickets" className="mx-3 mt-6" style={{color:"white"}}>Mint NFTickets</Link>}
+                                 {(!props.web3States[3] ) && <Link to="events" className="mx-3 mt-6" style={{color: "white"}}>Events</Link>}
+                                 {!props.web3States[3] && <Link to="my-tickets" className="mx-3 mt-6" style={{color:"white"}}>My Tickets</Link>}
+                                 {!props.web3States[3] && <Link to="mint-tickets" className="mx-3 mt-6" style={{color:"white"}}>Mint NFTickets</Link>}
                                  {/*{props.web3States[1]!=null && <Link to="my-funds" className="mx-3 mt-6" style={{color:"white"}}>My Funds</Link>}*/}
-
 
                               </Nav>
                 </Navbar.Collapse>
@@ -41,6 +46,8 @@ export default function NFTicketsNavbar(props: any) {
                         <div>
                             {props.web3States[1] && <span>Account: {props.web3States[1]}</span>}
                         </div>
+                        {(props.web3States[3] && props.web3States[2]) && <div><span style={{color:"red"}}>Please connect to Polygon's Mumbai Testnet</span></div>}
+
                     </div>
                     <Button disabled={props.web3States[1]} style={{backgroundColor: ColorPalette.secondaryColor, borderColor: ColorPalette.secondaryColor}} onClick={connectToMetamask}>Connect your wallet</Button>
 

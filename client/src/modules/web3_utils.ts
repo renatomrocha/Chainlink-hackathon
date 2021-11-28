@@ -64,6 +64,8 @@ export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunctio
     web3.currentProvider.on("chainChanged", async (chain:any) => {
         chainUpdateFunction(chain);
     })
+
+    return Promise.all([web3, accounts, chainId]);
 }
 
 
