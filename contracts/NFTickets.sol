@@ -60,6 +60,9 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     event TicketsUpdated(uint256[] _tokenIds);
 
 
+    // Get re-sale details
+    event TicketOnResale(uint256 _tokenId, address _seller);
+
     //Oracle method
     function getMaticPrice() public view returns (uint256) {
         (
@@ -222,6 +225,8 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         _resaleTicket.resalePrice = _resalePrice;
 
         resale[_tokenId][msg.sender] = _resaleTicket;
+
+        emit TicketOnResale( _tokenId,  msg.sender);
     }
 
 
