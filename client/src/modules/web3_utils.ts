@@ -3,16 +3,16 @@ import Web3 from "web3";
 import detectEthereumProvider from "@metamask/detect-provider";
 declare const window :any;
 
-export const MUMBAI_CONTRACT_ADDRESS = "0xaa7d4CF0bA52d83A43FD7C4002b22d06dB6bd226";
+export const MUMBAI_CONTRACT_ADDRESS = "0x491Ff03837e433baF74BbdEbED84165888dbB1EF";
 
-
-const MUMBAI_CONTRACT_ADDRESS_REMIX = "0x43f96e3d0B205D971C83F55481739F7807385fFE"
+// export const PRODUCTION_MUMBAI_CONTRACT_ADDRESS = "0xe7160776F2b517Ca27F5a9A649991F8De646701C";
 
 export const initContract = (web3: any, contractSetter: Function, contractDefinition: any) => {
     const abi = contractDefinition.default.abi;
     const contractAddress = MUMBAI_CONTRACT_ADDRESS
     const contract: any = new web3.eth.Contract(abi, contractAddress)
     contractSetter(contract);
+
 }
 
 
@@ -25,6 +25,8 @@ export const loadBlockchainData = async () => {
     const network = await web3.eth.net.getNetworkType()
     return {"web3":web3,"network":network,"accounts":accounts}
 }
+
+
 
 export const connectWallet = async (web3UpdateFunction:any, accountUpdateFunction:any, chainUpdateFunction:any) => {
     let provider : any;

@@ -88,10 +88,10 @@ export const withdrawFunds = async (nftContract: any, account: any) => {
 
 }
 
-export const getResaleTickets = async(contract: any) => {
+export const getResaleTickets = async(web3:any, contract: any) => {
     let resaleTickets = [];
     const eventList = await contract.getPastEvents("TicketOnResale", {
-            fromBlock: 0,
+            fromBlock:  await web3.eth.getBlockNumber() - 950,
             toBlock: "latest",
           }).catch((e: any) => window.alert(e));
 

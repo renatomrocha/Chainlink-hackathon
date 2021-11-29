@@ -20,7 +20,7 @@ const TicketGenerator = (props: any) => {
         });
     }
 
-    return (<div className="mt-3">
+    return (<div className="mt-3" >
                 <div>
                     <TicketCanvas props={{uri:"http://bafybeigblofriz5b4zg4xil45t36snirvpzvja63r2yxybwm5ncuphane4.ipfs.localhost:8080/"}}></TicketCanvas>
                 </div>

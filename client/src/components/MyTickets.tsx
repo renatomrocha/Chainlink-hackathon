@@ -69,7 +69,7 @@ const MyTickets = (props: any) => {
 
         {myTickets != null && myTickets.map((ticket:any, idx: number) => {
             console.log("Ticket is: ", ticket);
-                return <TicketDisplay  key={idx} ticket={ticket} account={props.account} contract={props.contract}/>
+                return <TicketDisplay  key={idx} ticket={ticket} account={props.account} contract={props.contract} allowResell={true}/>
             })}
     </div>)
 }

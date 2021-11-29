@@ -34,7 +34,9 @@ const TicketCanvas = (props:any) => {
     const styles = {
         border: '2px solid rgba(0, 0, 0, 0.5)',
         borderRadius:'10px',
-        padding:'20px',
+        margin:'20px',
+        width:'98%',
+        // padding:'20px',
         marginBottom:'50px'
     };
 
@@ -166,7 +168,7 @@ const TicketCanvas = (props:any) => {
                         <label className="mx-3">Choose file: </label>
                         <input type="file" name="myImage" onChange={onImageChange} />
                     </Row>
-                    <Form className="mt-3">
+                    <Form className="mt-3" style={{width:"80%"}}>
                         <h4>Ticket metadata</h4>
                         <Form.Group className="mb-3" controlId="formEventName">
                             <Form.Label>Event name</Form.Label>
@@ -174,7 +176,7 @@ const TicketCanvas = (props:any) => {
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="formUnitPrice">
-                            <Form.Label>Unit Price</Form.Label>
+                            <Form.Label>Unit Price ($)</Form.Label>
                             <Form.Control type="unit_price" placeholder="Uni price in dollars"  value={eventMetadata.unitPrice} onChange={changeEventUnitPriceHandler}/>
                         </Form.Group>
 
@@ -187,11 +189,13 @@ const TicketCanvas = (props:any) => {
                             <Form.Label>Percentage on resale</Form.Label>
                             <Form.Control type="perc_resale" placeholder="Percentage on resale" value={eventMetadata.percentageOnResale} onChange={changeEventResalePercHandler}/>
                         </Form.Group>
-
+                        <Form.Group className="mb-3" controlId="expirationDate">
+                            <Form.Label>Event Date</Form.Label>
                         <DatePicker selected={expirationDateTimestamp} onChange={(date: any) => setExpirationDateTimestamp(date)} />
+                        </Form.Group>
                     </Form>
                     <Row className="mt-3">
-                        {!minting && !(mintingError || mintingSuccessful) && <Button style={{backgroundColor: ColorPalette.secondaryColor, borderColor: ColorPalette.secondaryColor}} onClick={_mintNFTicket}>Mint tickets</Button>}
+                        {!minting && !(mintingError || mintingSuccessful) && <Button style={{backgroundColor: ColorPalette.secondaryColor, borderColor: ColorPalette.secondaryColor, width:"80%"}} onClick={_mintNFTicket}>Mint tickets</Button>}
 
                         {mintingError && <span style={{color: ColorPalette.warning, fontSize:"1.3em"}}>Something went wrong while minting your tickets</span>}
                         {mintingSuccessful && <span style={{color: ColorPalette.success , fontSize:"1.3em"}}>NFTickets successfully minted! </span>}

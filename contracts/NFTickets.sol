@@ -214,7 +214,7 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
     function putOnResale(uint256 _tokenId, uint256 _numTickets, uint256 _resalePrice) public {
         CustomTicket memory _ticket = nfTickets[_tokenId];
         require(msg.sender != _ticket.owner, "Owner cannot re-sell tickets");
-        require(_resalePrice <= _ticket.tokenSalePrice, "You cannot sell at a higher price than original");
+//        require(_resalePrice <= _ticket.tokenSalePrice, "You cannot sell at a higher price than original");
 
         uint256 _ownedTickets = balanceOf(msg.sender, _tokenId);
         require(_numTickets <= _ownedTickets, "You don't have enough tickets");
@@ -245,17 +245,31 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
 
         require(_numTickets <= _resaleTicket.num, "Owner doesn't have enough tickets");
 
+
+
+
         uint256 _resaleFeePercent = nfTickets[_tokenId].percentageOnResale;
         address _owner = nfTickets[_tokenId].owner;
-        uint256 _ticketPrice = _numTickets * _resaleTicket.resalePrice;
-        uint256 _totalPrice = _ticketPrice * (1 + _resaleFeePercent/100);
-        require(msg.value >=  _totalPrice, "Not enough value sent");
+//        uint256 _ticketPrice = _numTickets * _resaleTicket.resalePrice;
+//        uint256 _totalPrice = _ticketPrice * (1 + _resaleFeePercent/100);
 
-        revenue[_seller] += _ticketPrice;
-        revenue[_owner] += _ticketPrice * _resaleFeePercent/100;
+        uint256 _unitPrice = _resaleTicket.resalePrice;
+        uint256 _totalRequestedTicketValue = _unitPrice * _numTickets;
+        uint256 _maticPrice = getMaticPrice();
+        uint256 _valueSentInDollars = _maticPrice*msg.value;
+        require(
+            _valueSentInDollars >= _totalRequestedTicketValue,
+            "Not enough funds sent to buy the tickets"
+        );
+
+//        require(msg.value >=  _totalPrice, "Not enough value sent");
+
+        revenue[_seller] += msg.value;
+
 
         resale[_tokenId][_seller].num -= _numTickets;
-        //TODO: Update the ownedTickets variable
+        updateOwnedTickets(msg.sender,_tokenId);
+
         _safeTransferFrom(_seller, msg.sender, _tokenId, _numTickets, "");
 
     }
@@ -302,11 +316,30 @@ contract NFTickets is ERC1155, KeeperCompatibleInterface {
         _updatedTickets = new uint256[](0);
     }
 
+
+
+       function _checkUpkeepNeeded() private returns(bool){
+        //TODO solve this issue to store which tickets are being updated
+       bool upkeepNeeded = false;
+        for (uint256 i = 0; i < _currentEventId; i++) {
+            if (
+                nfTickets[i].expirationDateTimestamp < block.timestamp * 1000 &&
+                nfTickets[i].expired != true
+
+            ) {
+                upkeepNeeded = true;
+                break;
+            }
+        }
+        return upkeepNeeded;
+    }
+
+
     // TODO make heavy computation on checkUpKeep side, return tickets to update in performData
     function checkUpkeep(
         bytes calldata /* checkData */
     ) external override returns (bool upkeepNeeded, bytes memory performData) {
-        upkeepNeeded = (block.timestamp - lastTimeStamp) > interval;
+        upkeepNeeded = _checkUpkeepNeeded();
         // We don't use the checkData in this example. The checkData is defined when the Upkeep was registered.
     }
 

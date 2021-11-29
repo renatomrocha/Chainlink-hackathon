@@ -34,6 +34,7 @@ export default function NFTicketsNavbar(props: any) {
                                  {(!props.web3States[3] ) && <Link to="events" className="mx-3 mt-6" style={{color: "white"}}>Events</Link>}
                                  {!props.web3States[3] && <Link to="my-tickets" className="mx-3 mt-6" style={{color:"white"}}>My Tickets</Link>}
                                  {!props.web3States[3] && <Link to="mint-tickets" className="mx-3 mt-6" style={{color:"white"}}>Mint NFTickets</Link>}
+                                 {!props.web3States[3] && <Link to="marketplace" className="mx-3 mt-6" style={{color:"white"}}>Marketplace</Link>}
                                  {/*{props.web3States[1]!=null && <Link to="my-funds" className="mx-3 mt-6" style={{color:"white"}}>My Funds</Link>}*/}
 
                               </Nav>

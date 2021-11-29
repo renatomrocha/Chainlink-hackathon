@@ -59,7 +59,7 @@ function App() {
                 {/*<Route path="my-funds" element={<MyFunds account={account} network={network} contract={contract}/>} />*/}
 
                 <Route path="/buy-ticket/:ticketId" element={<BuyTickets account={account} network={network} contract={contract}/>} />
-                <Route path="/marketplace" element={<MarketPlace account={account} contract={contract}/>} />
+                <Route path="/marketplace" element={<MarketPlace web3={web3} account={account} contract={contract}/>} />
             </Routes>
         </BrowserRouter>
     </div>
@@ -67,7 +67,3 @@ function App() {
 }
 
 export default App;
-
-// https://ipfs.infura.io:5001/QmZw2UvYKRUt2cwHMuF5bW5Ku1PUqKHduF2sMAJ7ns6C4u
-
-    //
