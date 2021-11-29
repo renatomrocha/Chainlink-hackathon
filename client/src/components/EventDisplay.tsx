@@ -9,6 +9,7 @@ import {ColorPalette} from "../styles/color_palette";
 export default function EventDisplay(props: any) {
 
     const [availableForSale, setAvailableForSale] = useState<any>(0);
+    const [formatedDate, setFormatedDate] = useState<any>(null);
 
     const navigate = useNavigate();
 
@@ -18,8 +19,12 @@ export default function EventDisplay(props: any) {
     }
 
     useEffect(()=> {
-        const _availableForSable = getAvailableForSale().then(()=>{})
-        console.log("Balance is: ", availableForSale);
+
+            var date = new Date(props.ticket.expirationDateTimestamp *1);
+            var datePieces = date.toString().split(" ");
+            var formattedDate = datePieces[0] + " " + datePieces[1] + " " + datePieces[2] + " " + datePieces[3]
+            setFormatedDate(formattedDate);
+
     },[])
 
     const routeChange=()=> {
@@ -47,7 +52,7 @@ export default function EventDisplay(props: any) {
 
                     <p style={infoStyle}>Tickets for sale: {availableForSale}</p>
                     <p style={infoStyle}>Price: {props.ticket.tokenSalePrice} $</p>
-                    <p style={infoStyle}>Event date: {props.ticket.expirationDateTimestamp}</p>
+                    <p style={infoStyle}>Event date: {formatedDate}</p>
                     <p style={infoStyle}>Maximum supply: {props.ticket.maxSupply}</p>
                     <p style={infoStyle}><span>State: </span>{props.ticket.expired?<span>Expired</span>:<span>Valid</span>}</p>
                     {!props.ticket.expired && props.ticket.owner.toUpperCase()!=props.account.toUpperCase()?<Button style={{backgroundColor: ColorPalette.secondaryColor, borderColor: ColorPalette.secondaryColor}} onClick={routeChange}>Buy Tickets</Button>:null}

@@ -34,9 +34,10 @@ export default function TicketDisplay(props: any) {
     },[])
 
     const getExipirationDateFromTimestamp = (timestamp: number) => {
-        let yourDate = new Date(timestamp);
-        console.log("Formatted date is: ", );
-        setFormatedDate(yourDate.toString());
+        var date = new Date(timestamp *1);
+        var datePieces = date.toString().split(" ");
+        var formattedDate = datePieces[0] + " " + datePieces[1] + " " + datePieces[2] + " " + datePieces[3]
+        setFormatedDate(formattedDate);
     }
 
     const getBalance = async () => {
@@ -122,7 +123,7 @@ export default function TicketDisplay(props: any) {
                     <p style={infoStyle}>Ticket Id: {props.ticket.ticketId}</p>
                     <p style={infoStyle}>Maximum supply: {props.ticket.maxSupply}</p>
                     <p style={infoStyle}>Price: {props.ticket.tokenSalePrice} $</p>
-                    <p style={infoStyle}>Expiration date: {props.ticket.expirationDateTimestamp}</p>
+                    <p style={infoStyle}>Expiration date: {formatedDate}</p>
                     <p style={infoStyle}>Balance: {balance}</p>
                     <p><span>State: </span>{props.ticket.expired?<span>Expired</span>:<span>Valid</span>}</p>
                     {props.ticket.owner.toUpperCase()==props.account.toUpperCase()?<p>Minted by me!</p>:<p>Usable</p>}

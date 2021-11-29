@@ -31,27 +31,13 @@ export default function TicketForResale(props: any) {
     const [ticketBuilt, setTicketBuilt] = useState<any>(false);
     const [maticPrice, setMaticPrice] = useState<any>(null);
 
-    // useEffect(()=> {
-    //     // getExipirationDateFromTimestamp(ticket.expirationDateTimestamp);
-    //
-    // },[])
-
-    // const getExipirationDateFromTimestamp = (timestamp: number) => {
-    //     let yourDate = new Date(timestamp);
-    //     console.log("Formatted date is: ", );
-    //     setFormatedDate(yourDate.toString());
-    // }
-
-    // const getBalance = async () => {
-    //     const _balance = await balanceOf(props.contract, props.account, ticket.ticketId);
-    //     setBalance(_balance)
-    //
-    // }
-
     useEffect(()=> {
         loadTicket()
             .then(()=> {
-
+                var date = new Date(ticket.expirationDateTimestamp *1);
+                var datePieces = date.toString().split(" ");
+                var formattedDate = datePieces[0] + " " + datePieces[1] + " " + datePieces[2] + " " + datePieces[3]
+                setFormatedDate(formattedDate);
             })
 
         getMaticPrice(props.contract)
