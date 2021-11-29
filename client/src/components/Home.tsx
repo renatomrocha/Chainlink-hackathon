@@ -13,7 +13,7 @@ function Home(props: any) {
                     <Col >
                 <h1>Welcome to NFTickets</h1>
                         <div >
-                <h3>A platform for NFT based ticket emission and marketplace</h3>
+                <h3>Emission platform and Marketplace for NFT based Tickets</h3>
                         <div  style={{marginTop:"5%"}}>
                             <span style={{fontSize:"1.3em"}}>Start emitting your event tickets today!</span>
                             <ul style={{fontSize:"1.3em"}}>
