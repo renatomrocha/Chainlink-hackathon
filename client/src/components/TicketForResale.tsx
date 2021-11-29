@@ -138,7 +138,6 @@ export default function TicketForResale(props: any) {
                         <img  style={{marginLeft:"-370px", marginTop:"-170px",zIndex:-1}} src={IPFS_BASE_URL + "/" + ticket.metadata.badge_uri} width="80" height="80"/>
                     </Col>
                     <Col>
-
                         <p style={infoStyle}>Ticket Id: {ticket.ticketId}</p>
                         <p style={infoStyle}>Seller: {ticket.seller}</p>
                         <p style={infoStyle}>Maximum supply: {ticket.maxSupply}</p>
