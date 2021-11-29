@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/Chainlink-hackathon/static/css/main.bab0b925.chunk.css",
-    "main.js": "/Chainlink-hackathon/static/js/main.e6372f69.chunk.js",
-    "main.js.map": "/Chainlink-hackathon/static/js/main.e6372f69.chunk.js.map",
-    "runtime-main.js": "/Chainlink-hackathon/static/js/runtime-main.db789438.js",
-    "runtime-main.js.map": "/Chainlink-hackathon/static/js/runtime-main.db789438.js.map",
+    "main.js": "/Chainlink-hackathon/static/js/main.58107452.chunk.js",
+    "main.js.map": "/Chainlink-hackathon/static/js/main.58107452.chunk.js.map",
+    "runtime-main.js": "/Chainlink-hackathon/static/js/runtime-main.2aab243b.js",
+    "runtime-main.js.map": "/Chainlink-hackathon/static/js/runtime-main.2aab243b.js.map",
     "static/css/2.92ab3f68.chunk.css": "/Chainlink-hackathon/static/css/2.92ab3f68.chunk.css",
-    "static/js/2.1f819004.chunk.js": "/Chainlink-hackathon/static/js/2.1f819004.chunk.js",
-    "static/js/2.1f819004.chunk.js.map": "/Chainlink-hackathon/static/js/2.1f819004.chunk.js.map",
-    "static/js/3.b90dfd13.chunk.js": "/Chainlink-hackathon/static/js/3.b90dfd13.chunk.js",
-    "static/js/3.b90dfd13.chunk.js.map": "/Chainlink-hackathon/static/js/3.b90dfd13.chunk.js.map",
+    "static/js/2.c474da30.chunk.js": "/Chainlink-hackathon/static/js/2.c474da30.chunk.js",
+    "static/js/2.c474da30.chunk.js.map": "/Chainlink-hackathon/static/js/2.c474da30.chunk.js.map",
+    "static/js/3.98ec9e9f.chunk.js": "/Chainlink-hackathon/static/js/3.98ec9e9f.chunk.js",
+    "static/js/3.98ec9e9f.chunk.js.map": "/Chainlink-hackathon/static/js/3.98ec9e9f.chunk.js.map",
     "index.html": "/Chainlink-hackathon/index.html",
     "static/css/2.92ab3f68.chunk.css.map": "/Chainlink-hackathon/static/css/2.92ab3f68.chunk.css.map",
     "static/css/main.bab0b925.chunk.css.map": "/Chainlink-hackathon/static/css/main.bab0b925.chunk.css.map",
-    "static/js/2.1f819004.chunk.js.LICENSE.txt": "/Chainlink-hackathon/static/js/2.1f819004.chunk.js.LICENSE.txt"
+    "static/js/2.c474da30.chunk.js.LICENSE.txt": "/Chainlink-hackathon/static/js/2.c474da30.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.db789438.js",
+    "static/js/runtime-main.2aab243b.js",
     "static/css/2.92ab3f68.chunk.css",
-    "static/js/2.1f819004.chunk.js",
+    "static/js/2.c474da30.chunk.js",
     "static/css/main.bab0b925.chunk.css",
-    "static/js/main.e6372f69.chunk.js"
+    "static/js/main.58107452.chunk.js"
   ]
 }
