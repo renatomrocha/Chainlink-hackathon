@@ -40,12 +40,14 @@ const MyTickets = (props: any) => {
         let processedScTickets : any[] = [];
         for(let a = 0; a<scTickets.length; a++) {
             let key : any;
-            let ticketObj: any = new Object();
+            let ticketObj: any = {};
             for (key in scTickets[a]) {
             ticketObj[key.toString()] = scTickets[a][key];
             }
             processedScTickets.push(ticketObj);
         }
+
+        console.log("Owned tickets: ", processedScTickets);
 
         for(let i = 0; i< processedScTickets.length; i++) {
             // const ticket = Object.fromEntries(scTickets[i])
