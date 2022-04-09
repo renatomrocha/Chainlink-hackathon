@@ -1,8 +1,8 @@
-NFTickets
+# NFTickets
 
 A NFT based ticket minting platform and marketplace
 
-Brief description
+**Brief description**
 
 - Enable Tickets as dynamic NFTs by making use of Keepers and information from the external world
 
